@@ -134,7 +134,7 @@ window.onload = function() {
         update: function() {
             if (this.hp < 1) this.kill();
             
-            if (this.y > canvas.height) { this.kill(); }
+            if (this.y > Game.canvas.height) { this.kill(); }
             else { this.y += this.speed }
         },
         collide: function(object) {
@@ -224,15 +224,28 @@ window.onload = function() {
             this.width = Game.random(3, 1);
             this.height = Game.random(3, 1);
             this.x = Game.random(Game.canvas.width);
+            this.alpha = Game.random(7,3) * .1;
         },
         update: function() {
             this.y += .5;
         },
         draw: function() {
             Game.ctx.fillStyle = '#eee';
+            Game.ctx.globalAlpha = this.alpha;
             Game.ctx.fillRect(this.x,this.y,this.width,this.height);
+            Game.ctx.globalAlpha = 1;
         }
-    })
+    });
+    
+    var Instructions = Entity.extend({
+        x: 5,
+        y: 15,
+        draw: function() {
+            Game.ctx.fillStyle = '#aaa';
+            Game.ctx.font = '12px arial';
+            Game.ctx.fillText('Tech Demo | Shoot: Space | Move: Arrows | FPS: ' + Game.fps, this.x, this.y);
+        }
+    });
     
     //var Score = Entity.extend({
     //        width: 5,
@@ -259,5 +272,5 @@ window.onload = function() {
     Game.spawnEntity(Background);
     Game.spawnEntity(HazardGen);
     Game.spawnEntity(Player);
-    
+    Game.spawnEntity(Instructions);
 }
