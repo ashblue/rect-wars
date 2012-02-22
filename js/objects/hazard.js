@@ -60,19 +60,49 @@ var HazardMini = Entity.extend({
         Game.ctx.globalAlpha = 1;
     }
 });
-var HazardGen = Entity.extend({
+//var HazardWave = Entity.extend({
+//    delayMin: 2,
+//    delayMax: 40,
+//    delay: 60,
+//    count: 0,
+//    update: function() {
+//        if (this.count > this.delay) {
+//            this.count = 0;
+//            this.delay = Game.random(this.delayMax,this.delayMin);
+//            Game.spawnEntity(Hazard, Game.random(480), -20);
+//        }
+//        else {
+//            this.count += 1;
+//        }
+//    }
+//});
+var HazardWave = Entity.extend({
+    delay: 60,
     delayMin: 2,
     delayMax: 40,
-    delay: 60,
+    
     count: 0,
+    spawn: 10,
+    
+    init: function() {
+        timerSpawn = new Timer();
+    },
     update: function() {
-            if (this.count > this.delay) {
-                    this.count = 0;
-                    this.delay = Game.random(this.delayMax,this.delayMin);
-                    Game.spawnEntity(Hazard, Game.random(480), -20);
-            }
-            else {
-                    this.count += 1;
-            }
+        if (this.count > this.delay) {
+            this.count = 0;
+            this.delay = Game.random(this.delayMax,this.delayMin);
+            Game.spawnEntity(Hazard, Game.random(480), -20);
+        }
+        if (this.count ) {
+            
+        }
+        else {
+            this.count += 1;
+        }
+    },
+    kill: function() {
+        this._super();
+        
+        // Get director and set wavesCount to true
     }
 });

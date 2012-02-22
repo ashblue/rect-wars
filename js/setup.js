@@ -11,17 +11,18 @@ var MyEngine = Engine.extend({
         'player',
         'hazard',
         'background',
-        'instructions'
+        'instructions',
+        'director'
     ]
 });
    
- // Create and activate your personal engine
- var Game = new MyEngine();
- Game.setup();
-     
- // Animation must be kept seperate due to a DOM error caused by self-reference in your objects
- function animate() {
-     requestAnimFrame( animate );
-     Game.draw();
- }
- animate();
+// Create and activate your personal engine
+var Game = new MyEngine();
+Game.setup();
+    
+// Animation must be kept seperate due to a DOM error caused by self-reference in your objects
+function animate() {
+    requestAnimFrame( animate );
+    Game.draw();
+}
+animate();
