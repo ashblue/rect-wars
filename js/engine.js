@@ -29,49 +29,124 @@ var Engine = Class.extend({
     
     fpsTimeLast: new Date(),
     
+    /* ----- Entity -----*/
+    // You may get all entities of a type, or filter them by a specific value
+    entityGetVal: function(name,val) {
+        // Setup stack for storage
+        var stack = new Array;
+        
+        // Loop through objects and get matched value
+        if (typeof val != 'undefined') { // Incase no val was passed
+            for (var j in this.storage) {
+                if (this.storage[j][(name)] == val) stack.push(this.storage[j]);
+            }
+        }
+        else {
+            for (var j in this.storage) {
+                if (this.storage[j][(name)]) stack.push(this.storage[j]);
+            }
+        }
+        
+        // Return value or false
+        if (stack.length > 0) {
+            return stack;
+        }
+        else {
+            return false;
+        }
+    },
+    
     /* ----- Loading -----*/
     load: true,
-    loadCur: 0,
-    loadInit: function() {
-        this.loadCount = this.objects.length;
-    },
-    loadLogic: function() {
-        if (this.loadCur === this.loadCount) this.load = false;
-        console.log(this.loadCur + ' ' + this.loadCount);
+    // Logic for drawing and displaying loading screen
+    loadUpdate: function() {
+        // Create loading numbers string
+        this.loadStatus = this.objectsCount + ' / ' + this.objects.length;
+        this.loadPer = (this.objectsCount / this.objects.length).toFixed(2);
+        
+        // Create loading bar information
+        this.ctx.font = 'italic 400 12px/2 Unknown Font, sans-serif';
     },
     loadDraw: function() {
+        // Background
         this.ctx.fillStyle = '#000';
-        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.fillRect(0, 0, this.width, this.height);        
+        
+        // Loading text
+        this.ctx.fillStyle = '#fff';
+        this.ctx.font = '40px arial';
+        this.ctx.textAlign = 'center';
+        this.ctx.fillText('Loading...', this.width / 2, this.height / 2 - 50);
+        
+        // Asset count text
+        this.ctx.font = '20px arial';
+        this.ctx.fillText(this.loadStatus, this.width / 2, this.height / 2 + 50);
+        
+        // Start loading bar background
+        this.ctx.fillStyle = '#fff';
+        var barOff = 100;
+        var barX = barOff / 2;
+        var barY = this.height / 2 - 20;
+        var barWidth = this.width - barOff;
+        var barHeight = 40;
+        this.ctx.fillRect(barX, barY, barWidth, barHeight);        
+        
+        // Loading bar front
+        this.ctx.fillStyle = '#00aaff';
+        barOff = 5;
+        barX = barX + barOff;
+        barY = barY + barOff;
+        barWidth = (barWidth - (barOff * 2)) * this.loadPer;
+        barHeight = barHeight - (barOff * 2);
+        this.ctx.fillRect(barX, barY, barWidth, barHeight);
     },
+    // Setup objects
     objects: new Array(), // Engine should contain array item file names for loading
     objectsUrl: 'js/objects/',
-    objectsLoader: function(array) {
-        // For each object it sets the path, then calls the inject
-        for (var key in array) {
-            var url = String(this.objectsUrl + array[key] + '.js');
-            this.objectsInject(url, this.objectsCallback(this.loadCur));
-        }
-    },
-    // http://stackoverflow.com/questions/310583/loading-javascript-dependencies-on-demand
-    // Would be nice if this pumped out a custom error message on fail so users knew how to fix it    
-    objectsInject: function(scriptPath, callback) {
-        var scriptNode = document.createElement('SCRIPT');
-        scriptNode.type = 'text/javascript';
-        scriptNode.src = scriptPath;
-    
-        var headNode = document.getElementsByTagName('HEAD');
-        if (headNode[0] != null)
-            headNode[0].appendChild(scriptNode);
-    
-        if (callback != null)    
-        {
-            scriptNode.onreadystagechange = callback;            
-            scriptNode.onload = callback;
-        }
-        this.loadCur++;
-    },
-    objectsCallback: function(stepUp) {
+    objectsCount: 0,
+    loadAssets: function() {
+        // Setup script
+        var scriptJS = document.createElement('script');
+        scriptJS.type = 'text/javascript';
+        scriptJS.src = this.objectsUrl + this.objects[this.objectsCount] + '.js';
 
+        scriptJS.onload = this.loadAssetsNext;
+
+        // Begin insertion
+        var headerJS = document.getElementsByTagName('HEAD');
+        headerJS[0].appendChild(scriptJS);
+    },
+    loadAssetsNext: function() {
+        // Increment object counter
+        Game.objectsCount++;
+        // Test to see if you should call another item
+        // If else fires all objects have been loaded, therefore create run.js
+        if ((Game.objectsCount) < Game.objects.length) {
+            // Setup script
+            var scriptJS = document.createElement('script');
+            scriptJS.type = 'text/javascript';
+            scriptJS.src = Game.objectsUrl + Game.objects[Game.objectsCount] + '.js';
+            
+            // Declare callback to fire after script has fully loaded
+            scriptJS.onload = Game.loadAssetsNext();
+        
+            // Begin insertion
+            var headerJS = document.getElementsByTagName('HEAD');
+            headerJS[0].appendChild(scriptJS);
+        }
+        else {
+            // Setup script
+            var scriptJSRun = document.createElement('script');
+            scriptJSRun.type = 'text/javascript';
+            scriptJSRun.src = 'js/run.js';
+
+            // Begin insertion
+            var headerJS = document.getElementsByTagName('HEAD');
+            headerJS[0].appendChild(scriptJSRun);
+            
+            // Clear out the loading screen
+            Game.load = false;
+        }
     },
     
     /* ----- Utilities -----*/
@@ -92,8 +167,7 @@ var Engine = Class.extend({
     // Try changing window to eval() to attach a variable to it
     spawnEntity: function(name, x, y) {
         // window[] allows you to process its contents and treat it as a variable
-        // eval() will process its contents before the variable can grab it
-        window['id' + this.id] = eval(new name);
+        window['id' + this.id] = (new name);
         this.storage.push(window['id' + this.id].spawn(x, y)); // Pushes your new variable into an array and runs its spawn function
         window['id' + this.id].id = this.id;
         
@@ -141,6 +215,12 @@ var Engine = Class.extend({
         // Run extra kill logic for object
         object.kill();
         
+        // Remove from main storage
+        for (var i in this.storage) {
+            if (this.storage[i] == object)
+                this.storage.splice(i,1);
+        }
+        
         // Remove from type storage
         switch (object.type) {
             case 'a':
@@ -176,11 +256,11 @@ var Engine = Class.extend({
             this.screen();
             Key.setup();
             
-            // Loading stuff
-            this.loadInit();
-            this.objectsLoader(this.objects);
+            // Load everyting necessary
+            this.loadAssets();
             
-            this.init();
+            // Run any extra logic added by user
+            this.extraInit();
         }
         else {
             this.setupFail();
@@ -194,7 +274,7 @@ var Engine = Class.extend({
         this.canvas.width = this.width;
         this.canvas.height = this.height;
     },
-    init: function() {
+    extraInit: function() {
         // Place your additional setup logic here
     },
     
@@ -208,7 +288,7 @@ var Engine = Class.extend({
         // screen is actually working. Really not testable until images are also loaded in.
         // PRODUCTION: Remove load to its own draw in the future for performance increase
         if (this.load) {
-            this.loadLogic();
+            this.loadUpdate();
             this.loadDraw();
         }
         else {
@@ -273,8 +353,8 @@ var Entity = Class.extend({
     },
     spawn: function(x,y) {
         if (x) this.x = x;
-        if (y) this.y = y; 
-        this.init();
+        if (y) this.y = y;
+
         return this;
     },
     kill: function() {
