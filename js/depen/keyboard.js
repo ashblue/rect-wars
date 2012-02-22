@@ -21,13 +21,13 @@ var Keyboard = Class.extend({
         'esc': 27,
         'space': 32,
         'backspace': 8,
-        
+
         // Modifiers
         'shift': 16,
         'ctrl': 17,
         'alt': 18,
         'capsLock': 20,
-        
+
         // Symbol keys (use at own risk outside of Mozilla and Chrome)
         ';': 59,
         '=': 61,
@@ -38,7 +38,7 @@ var Keyboard = Class.extend({
         '`': 192, // aka ~
         '[': 219,
         ']': 221,
-        
+
         // Special keys
         'insert': 45,
         'delete': 46,
@@ -46,13 +46,13 @@ var Keyboard = Class.extend({
         'end': 35,
         'pageUp': 33,
         'pageDown': 34,
-        
+
         // Arrows
         'arrowUp': 38,
         'arrowDown': 40,
         'arrowLeft': 37,
         'arrowRight': 39,
-        
+
         // Numbers
         '0': 48,
         '1': 49,
@@ -64,7 +64,7 @@ var Keyboard = Class.extend({
         '7': 55,
         '8': 56,
         '9': 57,
-        
+
         // Num lock
         'num0': 96,
         'num1': 97,
@@ -76,13 +76,13 @@ var Keyboard = Class.extend({
         'num7': 103,
         'num8': 104,
         'num9': 105,
-        'num*': 106, 
-        'num+': 107, 
-        'num-': 108, 
+        'num*': 106,
+        'num+': 107,
+        'num-': 108,
         'numLock': 144,
         'num.': 110,
         'num/': 111,
-        
+
         // Letters
         'a': 65,
         'b': 66,
@@ -110,7 +110,7 @@ var Keyboard = Class.extend({
         'x': 88,
         'y': 89,
         'z': 90,
-        
+
         // F keys
         'f1': 112,
         'f2': 113,
@@ -125,13 +125,13 @@ var Keyboard = Class.extend({
         'f11': 122,
         'f12': 123
     },
-    
+
     // Removes default keyboard shortcuts native to browser
     setup: function() {
         window.addEventListener('keydown', this.down, true);
         window.addEventListener('keyup', this.up, true);
     },
-    
+
     // Window key monitoring
     down: function(event) {
         Input.key.down = event.which;
@@ -144,13 +144,13 @@ var Keyboard = Class.extend({
         Input.key.up = event.which;
         Input.key.set = true;
     },
-    
+
     // Test if a key is currently being held down
     monitor: function() {
         if (Input.key.down == Input.key.up) Input.key.down = Input.key.up = '';
         Input.key.push = '';
     },
-    
+
     // Key true or false processing functions
     press: function(k) {
         if (Input.key.down == this.input[k])
