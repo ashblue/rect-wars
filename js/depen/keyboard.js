@@ -7,10 +7,11 @@ Desc: Handles all keyboard input.
 
 var Input = {
     key: {
-        press: '',
+        press: new Array(),
+        push: new Array(),
         up: '',
-        push: '',
-        set: true
+        down: new Array(),
+        set: ''
     }
 };
 var Keyboard = Class.extend({
@@ -134,36 +135,44 @@ var Keyboard = Class.extend({
 
     // Window key monitoring
     down: function(event) {
-        Input.key.down = event.which;
-        if (Input.key.set == true) {
-            Input.key.push = event.which;
-            Input.key.set = false;
+        if (Input.key.set != event.which) {
+            var index = Input.key.down.indexOf(event.which);
+            if (index == -1) {
+                Input.key.down.push(event.which);
+            }
+            Input.key.set = event.which;
         }
     },
     up: function(event) {
+        var index = Input.key.down.indexOf(event.which);
+        if (index != -1) {
+           Input.key.down.splice(index, 1);
+        }
         Input.key.up = event.which;
-        Input.key.set = true;
+        Input.key.set = '';
     },
 
     // Test if a key is currently being held down
     monitor: function() {
-        if (Input.key.down == Input.key.up) Input.key.down = Input.key.up = '';
-        Input.key.push = '';
+        // if (Input.key.down == Input.key.up) {
+        //     Input.key.down = Input.key.up = '';
+        // }
+        // Input.key.push = '';
     },
 
     // Key true or false processing functions
     press: function(k) {
-        if (Input.key.down == this.input[k])
+        if (Input.key.down.indexOf(this.input[k]) != -1)
             return true;
         else {
             return false;
         }
     },
-    push: function(k) {
-        if (Input.key.push == this.input[k])
-            return true;
-        else {
-            return false;
-        }
-    }
+    // push: function(k) {
+    //     if (Input.key.push == this.input[k])
+    //         return true;
+    //     else {
+    //         return false;
+    //     }
+    // }
 });
