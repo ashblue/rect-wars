@@ -82,7 +82,8 @@ var HazardWave = Entity.extend({
     delayMax: 40,
     
     count: 0,
-    spawn: 10,
+    countTotal: 0,
+    countMax: 10,
     
     init: function() {
         timerSpawn = new Timer();
@@ -92,17 +93,21 @@ var HazardWave = Entity.extend({
             this.count = 0;
             this.delay = Game.random(this.delayMax,this.delayMin);
             Game.spawnEntity(Hazard, Game.random(480), -20);
+            this.countTotal++;
         }
-        if (this.count ) {
-            
+        else if (this.countTotal >= this.countMax) {
+            this.kill();
         }
         else {
             this.count += 1;
         }
     },
     kill: function() {
-        this._super();
-        
         // Get director and set wavesCount to true
+        var director = Game.entityGetVal('wavesCount');
+        director[0].wavesSpawn = true;
+        console.log('kill');
+        
+        this._super();
     }
 });

@@ -3,15 +3,9 @@ var Director = Entity.extend({
     delayInit: 5,
     delayEnd: 5,
     
-    //waves: {
-    //    wave0: HazardWave,
-    //    wave1: HazardWave,
-    //    wave2: HazardWave,
-    //    wave3: HazardWave,
-    //    wave4: HazardWave
-    //},
     wavesCount: 0,
-    wavesSpawn: false,
+    
+    wavesSpawn: true,
     
     init: function() {
         // Setup delay timer
@@ -21,15 +15,25 @@ var Director = Entity.extend({
         // Setup delay init timer
         timerInitDelay = new Timer();
         timerInitDelay.set(this.delay);
+        
+        // Setup your array for how many waves you want
+        this.waves = [
+            HazardWave,
+            HazardWave,
+            HazardWave,
+            HazardWave,
+            HazardWave
+        ];
     },
     update: function() {
         // Check if a wave is active
-        if (this.wavesSpawn) {
-            //Game.spawnEntity(this.waves[this.wavesCount], 0, 0);
-            this.wavesCount = false;
+        if (this.wavesSpawn && (this.wavesCount < this.waves.length)) {
+            Game.spawnEntity(this.waves[this.wavesCount], 0, 0);
+            this.wavesSpawn = false;
+            this.wavesCount++;
         }
-                // If not spawn next wave
-                // If spawned wave does not exist, kill director and all elements, boot up next game phase
+        // If not spawn next wave
+        // If spawned wave does not exist, kill director and all elements, boot up next game phase
     },
     kill: function() {
         this._super();
