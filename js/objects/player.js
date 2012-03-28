@@ -59,6 +59,6 @@ var Laser = Entity.extend({
     draw: function() {
         // Change to a triangle later
         Game.ctx.fillStyle = this.color;
-        Game.ctx.fillRect(this.x, this.y, this.width, this.height);
+        Game.ctx.fillRect(this.x, this.y - this.height, this.width, this.height);
     }
 });
