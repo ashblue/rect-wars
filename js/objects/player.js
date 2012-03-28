@@ -8,7 +8,8 @@ var Player = Entity.extend({
     speed: 3,
     delay: -1,
     hp: 10,
-    color: '#eee',
+    color: '#ff0000',
+    player: true,
 
     collide: function(object) {
         //this.kill();

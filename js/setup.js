@@ -1,5 +1,5 @@
 /*------------
-Running The Game 
+Running The Game
 -----------*/
 // You can overwrite any of the core in start() and init here before firing onload
 var MyEngine = Engine.extend({
@@ -11,15 +11,16 @@ var MyEngine = Engine.extend({
         'player',
         'hazard',
         'background',
+        'powerup',
         'instructions',
         'director'
     ]
 });
-   
+
 // Create and activate your personal engine
 var Game = new MyEngine();
 Game.setup();
-    
+
 // Animation must be kept seperate due to a DOM error caused by self-reference in your objects
 function animate() {
     requestAnimFrame( animate );
