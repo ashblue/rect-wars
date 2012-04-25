@@ -10,7 +10,6 @@ URL: http://blueashes.com
 Twitter: http://twitter.com/#!/ashbluewd
 */
 
-
 /*---------
  Core game logic
 ---------*/
@@ -58,14 +57,22 @@ var Engine = Class.extend({
     
     /* ----- Loading -----*/
     load: true,
+    loadCount: 0,
+    loadTotal: 0,
     // Logic for drawing and displaying loading screen
     loadUpdate: function() {
         // Create loading numbers string
-        this.loadStatus = this.objectsCount + ' / ' + this.objects.length;
-        this.loadPer = (this.objectsCount / this.objects.length).toFixed(2);
+        this.loadStatus = this.loadCount + ' / ' + this.loadTotal;
+        this.loadPer = (this.loadCount / this.loadTotal).toFixed(2);
         
         // Create loading bar information
         this.ctx.font = 'italic 400 12px/2 Unknown Font, sans-serif';
+        
+        // Count loaded objects
+        if (this.imgResp && // double check images have arrived
+        this.loadCount == this.loadTotal) { 
+            this.load = false;
+        }
     },
     loadDraw: function() {
         // Background
@@ -105,6 +112,12 @@ var Engine = Class.extend({
     objectsUrl: 'js/objects/',
     objectsCount: 0,
     loadAssets: function() {
+        // Load images
+        this.loadImgs();
+        
+        // Set number of images
+        this.loadCount += this.objects.length;
+        
         // Setup script
         var scriptJS = document.createElement('script');
         scriptJS.type = 'text/javascript';
@@ -119,6 +132,7 @@ var Engine = Class.extend({
     loadAssetsNext: function() {
         // Increment object counter
         Game.objectsCount++;
+        Game.loadTotal++;
         // Test to see if you should call another item
         // If else fires all objects have been loaded, therefore create run.js
         if ((Game.objectsCount) < Game.objects.length) {
@@ -128,7 +142,7 @@ var Engine = Class.extend({
             scriptJS.src = Game.objectsUrl + Game.objects[Game.objectsCount] + '.js';
             
             // Declare callback to fire after script has fully loaded
-            scriptJS.onload = Game.loadAssetsNext();
+            scriptJS.onload = Game.loadAssetsNext;
         
             // Begin insertion
             var headerJS = document.getElementsByTagName('HEAD');
@@ -145,7 +159,50 @@ var Engine = Class.extend({
             headerJS[0].appendChild(scriptJSRun);
             
             // Clear out the loading screen
-            Game.load = false;
+            //Game.loadImgs();
+            //Game.load = false;
+        }
+        
+        
+    },
+    
+    loadXmlHttp: new XMLHttpRequest(),
+    pathImg: 'images/',
+    imgResp: false,
+    loadImgs: function() {
+        var self = this;
+        
+        // Prep XML HTTP request
+        this.loadXmlHttp.open('GET', 'images.php',true);
+        this.loadXmlHttp.send();
+        
+        // When request is complete
+        this.loadXmlHttp.onreadystatechange = function() {
+            if (self.loadXmlHttp.readyState==4 && self.loadXmlHttp.status==200) {
+                // Prep data
+                var images = JSON.parse(self.loadXmlHttp.responseText);        
+                
+                // Increment number of game items
+                self.loadCount += images.length;
+                
+                // Tell the sytem that images have given a response
+                self.imgResp = true;
+                
+                // Loop through all items
+                // http://www.mennovanslooten.nl/blog/post/62
+                for (var i = 0; i < images.length; i++ ) {
+                    var img = new Image();
+                    var imgName = images[i];
+                    img.src = self.pathImg + images[i];
+                    
+                    img.onload = (function(val) {
+                        // returning a function forces the load into another scope
+                        return function() {
+                            Game.loadTotal++;
+                        }
+                    })(i);
+                }
+            }
         }
     },
     
@@ -256,6 +313,8 @@ var Engine = Class.extend({
             this.screen();
             Key.setup();
             
+            this.animate(this);
+            
             // Load everyting necessary
             this.loadAssets();
             
@@ -276,6 +335,10 @@ var Engine = Class.extend({
     },
     extraInit: function() {
         // Place your additional setup logic here
+    },
+    animate: function() {
+        requestAnimFrame( Game.animate );
+        Game.draw();
     },
     
     /* ----- Animation control -----*/
@@ -329,6 +392,7 @@ var Engine = Class.extend({
 /*-----------
  Entity Pallete
 -----------*/
+// Note: this can be moved into the class extension script by slightly modifying it
 var Entity = Class.extend({
     x: 0,
     y: 0,
@@ -339,17 +403,28 @@ var Entity = Class.extend({
     type: 0,
     hp: 1,
     
-    init: function() {
-        // place extra setup code initiated before spawning here
+    // placeholders to detect animation id change
+    // Must be a -1 to be detected easily, decreases logic because there are no -1 ids ever
+    animCur: {
+        id: -1
     },
+    animSet: {
+        id: -1
+    },
+
     update: function() {
+        this.animNew();
+        
         // place code before each draw sequence here
     },
     collide: function(object) {
         // What happens when elements collide?
     },
     draw: function() {
-        // Logic for drawing the object
+        // If an animation sheet has been set, it will fired here
+        if (this.animCur.id != -1) {
+            this.animSet.crop(this.x, this.y, this.width, this.height);
+        }
     },
     spawn: function(x,y) {
         if (x) this.x = x;
@@ -359,5 +434,37 @@ var Entity = Class.extend({
     },
     kill: function() {
         Graveyard.push(this);
+    },
+    
+    // check if set animation has changed
+    animNew: function() {
+        if (this.animSet.id != this.animCur.id) {
+            // clear any running intervals to be sure they don't also fire
+            this.animCur.active = false;
+            clearInterval(this.animCur.animRun);
+            
+            // Set animation to active
+            this.animSet.active = true;
+            
+            // Start new interval
+            this.animSet.run();
+            this.animCur = this.animSet;
+        }        
+    },
+    
+    // Moves an item in storage, normally used to force an item to draw on top of others
+    // Might be better to give each object a z-index and take that into account when re-ordering via order
+    order: function(loc) {        
+        // Get index of this
+        var index = Game.storage.indexOf(this);
+        
+        // Delete old location
+        Game.storage.splice(index, 1);
+        
+        // Flip the placement for injection by reversing the array placement
+        inject = Game.storage.length - loc;
+        
+        // Inject new location
+        Game.storage.splice(inject, 0, this);
     }
 });
