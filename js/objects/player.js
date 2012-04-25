@@ -8,7 +8,8 @@ var Player = Entity.extend({
     speed: 3,
     delay: -1,
     hp: 10,
-    color: '#eee',
+    color: '#ff0000',
+    player: true,
 
     collide: function(object) {
         //this.kill();
@@ -58,6 +59,6 @@ var Laser = Entity.extend({
     draw: function() {
         // Change to a triangle later
         Game.ctx.fillStyle = this.color;
-        Game.ctx.fillRect(this.x, this.y, this.width, this.height);
+        Game.ctx.fillRect(this.x, this.y - this.height, this.width, this.height);
     }
 });
