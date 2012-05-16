@@ -8,6 +8,7 @@ var MyEngine = Engine.extend({
     score: 20,
     scoreEnemy: 5,
     objects: [
+        'bullet',
         'player',
         'hazard',
         'background',

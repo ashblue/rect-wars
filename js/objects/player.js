@@ -33,6 +33,10 @@ var Player = Entity.extend({
             Game.spawnEntity(Laser, this.x + (this.width / 2), this.y);
             this.delay = 20;
         }
+        else if (Key.press('b') && this.delay < 0) {
+            Game.spawnEntity(Bullet, this.x + (this.width / 2), this.y);
+            this.delay = 20;
+        }
         else {
             this.delay -= 1;
         }
