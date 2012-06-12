@@ -11,7 +11,6 @@ var MyEngine = Engine.extend({
         'player',
         'hazard',
         'background',
-        'powerup',
         'instructions',
         'director'
     ]
