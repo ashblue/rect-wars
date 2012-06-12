@@ -1,21 +1,20 @@
-Setup Guide
+Main title
 =============
 
-While Canvas Prime is ready to be used, it's not ready for production. Be warned that features will be added and removed before the final release.
+Intro
 
-1. Unpack the files to a directory on a server (required for on-demand JavaScript)
-2. Create entities in 'js/objects' folder
-3. Configure your setup.js
-4. Configure your run.js
-5. Run index.html in the root to see the magic happen
+1. List
+2. List
+3. List
 
-'While the below examples will help you with understanding the engine, please see the built in files for the latest documentation.'
+* List
+* List
+* List
 
-# Entities
+# Title
 
-Each entity should have its own separate file in 'js/objects', these will be loaded by the game's built-in loader
 
-## Example
+## Sub-Title (Example code)
 
     var Square = Entity.extend({
         type: 'a',
@@ -42,48 +41,3 @@ Each entity should have its own separate file in 'js/objects', these will be loa
             Game.ctx.fillRect(this.x,this.y,this.width,this.height);
         }
     });
-
-
-
-# Setup.js
-
-The setup file is where you can configure and overwrite your engine. It is ready to be used out of the box, but you may need to figure your object file names here.
-
-## Example
-
-    // You can tweak your engine through the init hook and add your own custom utilities here
-    var MyEngine = Engine.extend({
-        width: 400,
-        height: 400,
-        // Make sure to load objects dependant on another AFTER their parent object has been loaded
-        objects: [
-            'square',
-            'square-evil',
-            'key-test'
-        ]
-    });
-      
-    // Create and activate your personal engine
-    var Game = new MyEngine();
-    Game.setup();
-        
-    // Animation must be kept seperate due to a DOM error caused by self-reference in objects
-    function animate() {
-        requestAnimFrame( animate );
-        Game.draw();
-    }
-    animate();
-
-
-# Run.js
-
-The run file is the objects that are run once the game has fully loaded. For example after creating and loading the setup objects you might run something like this.
-
-## Example
-
-    window.onload = function() {    
-        Game.spawnEntity(Square, 200, 50);
-        Game.spawnEntity(SquareEvil, 100, 100);
-        Game.spawnEntity(SquareEvil, 150, 75);
-        Game.spawnEntity(KeyTest, 0, 0);
-    }
