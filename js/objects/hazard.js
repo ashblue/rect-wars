@@ -106,7 +106,6 @@ var HazardWave = Entity.extend({
         // Get director and set wavesCount to true
         var director = Game.entityGetVal('wavesCount');
         director[0].wavesSpawn = true;
-        console.log('kill');
         
         this._super();
     }
