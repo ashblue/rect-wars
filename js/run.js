@@ -3,6 +3,7 @@ window.onload = function() {
     Game.spawnEntity(Director);
     Game.spawnEntity(Player);
     Game.spawnEntity(Instructions);
+    Game.spawnEntity(PowerupShield);
 }
 
     // document.cancelFullScreen = document.webkitCancelFullScreen || document.mozCancelFullScreen;
