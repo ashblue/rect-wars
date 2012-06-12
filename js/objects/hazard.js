@@ -1,47 +1,59 @@
-var Hazard = Entity.extend({
+cp.template.Hazard = cp.template.Entity.extend({
     type: 'b',
     width: 20,
     height: 20,
     speedMin: 2,
     speedMax: 6,
-    init: function() {
-        this.speed = Game.random(this.speedMax, this.speedMin);
-        this.alpha = Game.random(9,5) * .1;
-        this.partCount = Game.random(12,7);
+    y: -20,
+    
+    init: function(x) {
+        this.x = x;
+        this.speed = cp.math.random(this.speedMax, this.speedMin);
+        this.alpha = cp.math.random(9, 5) * .1;
+        this.partCount = cp.math.random(12, 7);
     },
+    
     update: function() {
         if (this.hp < 1) this.kill();
         
-        if (this.y > Game.canvas.height) { this.kill(); }
-        else { this.y += this.speed }
-    },
-    collide: function(object) {
-        for(var obj = this.partCount; obj > 0; obj--) {
-            Game.spawnEntity(HazardMini, this.x, this.y);
+        if (this.y > cp.core.height) {
+            this.kill();
+        } else {
+            this.y += this.speed
         }
     },
-    draw: function() {
-            Game.ctx.fillStyle = '#777';
-            Game.ctx.globalAlpha = this.alpha;
-            Game.ctx.fillRect(this.x,this.y,this.width,this.height);
-            Game.ctx.globalAlpha = 1;
+    
+    collide: function(object) {
+        for(var obj = this.partCount; obj > 0; obj--) {
+            cp.game.spawn('HazardMini', this.x, this.y);
+        }
     },
-    kill: function() {
-        this._super();
+    
+    draw: function() {
+            cp.ctx.fillStyle = '#777';
+            cp.ctx.globalAlpha = this.alpha;
+            cp.ctx.fillRect(this.x, this.y, this.width, this.height);
+            cp.ctx.globalAlpha = 1;
     }
 });
-var HazardMini = Entity.extend({
+
+cp.template.HazardMini = cp.template.Entity.extend({
     width: 5,
     height: 5,
     speedMin: 2,
     speedMax: 6,
-    init: function() {
-        // needs a random 1 or -1
-        this.speedX = Game.random(this.speedMax, this.speedMin) * Game.randomPosNeg();
-        this.speedY = Game.random(this.speedMax, this.speedMin) * Game.randomPosNeg();
+    
+    init: function(x, y) {
+        this.x = x;
+        this.y = y;
         
-        this.alpha = Game.random(7,3) * .1;
+        // needs a random 1 or -1
+        this.speedX = cp.math.random(this.speedMax, this.speedMin) * cp.math.randomPosNeg();
+        this.speedY = cp.math.random(this.speedMax, this.speedMin) * cp.math.randomPosNeg();
+        
+        this.alpha = cp.math.random(7,3) * .1;
     },
+    
     update: function() {            
         if (this.alpha <= .02) {
             this.kill();
@@ -53,30 +65,16 @@ var HazardMini = Entity.extend({
             this.y += this.speedY;
         }
     },
+    
     draw: function() {
-        Game.ctx.fillStyle = '#777';
-        Game.ctx.globalAlpha = this.alpha;
-        Game.ctx.fillRect(this.x,this.y,this.width,this.height);
-        Game.ctx.globalAlpha = 1;
+        cp.ctx.fillStyle = '#777';
+        cp.ctx.globalAlpha = this.alpha;
+        cp.ctx.fillRect(this.x, this.y, this.width, this.height);
+        cp.ctx.globalAlpha = 1;
     }
 });
-//var HazardWave = Entity.extend({
-//    delayMin: 2,
-//    delayMax: 40,
-//    delay: 60,
-//    count: 0,
-//    update: function() {
-//        if (this.count > this.delay) {
-//            this.count = 0;
-//            this.delay = Game.random(this.delayMax,this.delayMin);
-//            Game.spawnEntity(Hazard, Game.random(480), -20);
-//        }
-//        else {
-//            this.count += 1;
-//        }
-//    }
-//});
-var HazardWave = Entity.extend({
+
+cp.template.HazardWave = cp.template.Entity.extend({
     delay: 60,
     delayMin: 2,
     delayMax: 40,
@@ -85,26 +83,22 @@ var HazardWave = Entity.extend({
     countTotal: 0,
     countMax: 10,
     
-    init: function() {
-        timerSpawn = new Timer();
-    },
     update: function() {
         if (this.count > this.delay) {
             this.count = 0;
-            this.delay = Game.random(this.delayMax,this.delayMin);
-            Game.spawnEntity(Hazard, Game.random(480), -20);
+            this.delay = cp.math.random(this.delayMax,this.delayMin);
+            cp.game.spawn('Hazard', cp.math.random(480));
             this.countTotal++;
-        }
-        else if (this.countTotal >= this.countMax) {
+        } else if (this.countTotal >= this.countMax) {
             this.kill();
-        }
-        else {
+        } else {
             this.count += 1;
         }
     },
+    
     kill: function() {
         // Get director and set wavesCount to true
-        var director = Game.entityGetVal('wavesCount');
+        var director = cp.game.entityGetVal('name','director');
         director[0].wavesSpawn = true;
         
         this._super();

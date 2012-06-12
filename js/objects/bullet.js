@@ -1,10 +1,10 @@
-var Bullet = Entity.extend({
-    name: "bullet",
+cp.template.Bullet = cp.template.Entity.extend({
+    name: 'bullet',
     type: 'a',
     width: 3,
     height: 3,
-    x: Game.width / 2,
-    y: Game.height - 50,
+    x: cp.core.width / 2,
+    y: cp.core.height - 50,
     active: true,
     speed: 10,
     angle: -1.75,
@@ -37,8 +37,8 @@ var Bullet = Entity.extend({
         this.y = this.y + this.speed * Math.sin(this.angle);
     },
     draw: function() {
-        Game.ctx.fillStyle = this.color;
-        Game.ctx.fillRect(this.x, this.y, this.width, this.height);
+        cp.ctx.fillStyle = this.color;
+        cp.ctx.fillRect(this.x, this.y, this.width, this.height);
     }
 });
 
