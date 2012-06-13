@@ -47,7 +47,7 @@ var Powerup = Entity.extend({
     },
     
     upgrade: function(obj) {
-        //obj.health += 3;
+        console.log(obj);
     }
 });
 
@@ -56,6 +56,7 @@ var PowerupShield = Powerup.extend({
     offsetX: '',
     offsetY: '',
     upgrade: function(obj) {
-        //obj.health += 3;
+        console.log(obj);
+        obj.color = '#00ff00';
     }
 });
