@@ -1,22 +1,25 @@
 /*------------
-Running The Game
+Running The Game 
 -----------*/
-// You can overwrite any of the core in start() and init here before firing onload
-var MyEngine = Engine.extend({
-    width: 700,
-    height: 700,
-    score: 20,
-    scoreEnemy: 5,
-    objects: [
-        'player',
-        'hazard',
-        'background',
-        'powerup',
-        'instructions',
-        'director'
-    ]
-});
+console.log(cp);
 
-// Create and activate your personal engine
-var Game = new MyEngine();
-Game.setup();
+// Enable debug mode
+cp.debug.active = true;
+
+// List of scripts to load from js/objects
+cp.load.objects = ['background', 'player', 'hazard', 'director', 'bullet', 'drone'];
+
+// init(width, height, run onLoad function)
+cp.core.init(700, 700, function() {
+    // Keyboard key configuration
+    cp.input.bind('arrowUp', 'up');
+    cp.input.bind('arrowDown', 'down');
+    cp.input.bind('arrowLeft', 'left');
+    cp.input.bind('arrowRight', 'right');
+    cp.input.bind('x', 'shoot');
+    
+    // Spawn objects
+    cp.game.spawn('Background');
+    cp.game.spawn('Player');
+    cp.game.spawn('Director');
+});
