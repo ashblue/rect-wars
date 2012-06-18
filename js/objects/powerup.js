@@ -1,3 +1,6 @@
+/**
+ * Powerup
+ */
 var Powerup = Entity.extend({
     type: 'b',
     width: 35,
