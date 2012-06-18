@@ -22,6 +22,6 @@ cp.core.init(700, 700, function() {
     cp.game.spawn('Background');
     cp.game.spawn('Player');
     cp.game.spawn('Director');
-	cp.game.spawn('PowerupShield');
-	cp.game.spawn('PowerupLaBomba');
+    cp.game.spawn('PowerupLaBomba');
+    cp.game.spawn('PowerupShield');
 });
