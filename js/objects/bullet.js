@@ -7,7 +7,7 @@ cp.template.Bullet = cp.template.Entity.extend({
     y: cp.core.height - 50,
     active: true,
     speed: 10,
-    angle: -1.75,
+    angle: 1.5707963267948966, // straight south, son!
     delay: -1,
     hp: 1,
     color: '#ff00ff',
@@ -16,21 +16,11 @@ cp.template.Bullet = cp.template.Entity.extend({
         object.hp -= 1;
         this.kill();
     },
-    init: function() {
-		/* *
-        console.log("init bullet");
-    
-        console.log("mouse_x");
-        console.log(mouse_x);
-        console.log("mouse_y");
-        console.log(mouse_y);
-    
-        console.log("this.x");
-        console.log(this.x);
-        console.log("this.y");
-        console.log(this.y);
-		/* */
-        
+    init: function(origin_x, origin_y, target_x, target_y) {
+      this.x = origin_x;
+      this.y = origin_y;
+      
+      this.angle = cp.math.angle(origin_x, origin_y, target_x, target_y);
     },
     update: function() {
         this.x = this.x + this.speed * Math.cos(this.angle);
@@ -41,16 +31,3 @@ cp.template.Bullet = cp.template.Entity.extend({
         cp.ctx.fillRect(this.x, this.y, this.width, this.height);
     }
 });
-
-/* *
-var mouse_x;
-var mouse_y;
-Game.canvas.addEventListener('click', on_canvas_click, false);
-function on_canvas_click(ev) {
-    mouse_x = ev.clientX - Game.canvas.offsetLeft;
-    mouse_y = ev.clientY - Game.canvas.offsetTop; 
-    
-    Game.spawnEntity(Bullet, this.x + (this.width / 2), this.y, "face");
-}
-
-/* */
