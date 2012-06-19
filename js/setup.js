@@ -7,7 +7,7 @@ console.log(cp);
 cp.debug.active = true;
 
 // List of scripts to load from js/objects
-cp.load.objects = ['background', 'player', 'hazard', 'director', 'bullet', 'drone'];
+cp.load.objects = ['background', 'player', 'hazard', 'director', 'bullet', 'drone', 'powerup'];
 
 // init(width, height, run onLoad function)
 cp.core.init(700, 700, function() {
@@ -22,4 +22,6 @@ cp.core.init(700, 700, function() {
     cp.game.spawn('Background');
     cp.game.spawn('Player');
     cp.game.spawn('Director');
+    cp.game.spawn('PowerupLaBomba');
+    cp.game.spawn('PowerupShield');
 });
