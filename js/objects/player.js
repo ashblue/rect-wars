@@ -1,7 +1,7 @@
 cp.template.Player = cp.template.Entity.extend({
     type: 'a',
-    width: 75,
-    height: 55,
+    width: 25,
+    height: 35,
     x: cp.core.width / 2,
     y: cp.core.height - 250,
     speed: 3,
@@ -9,19 +9,24 @@ cp.template.Player = cp.template.Entity.extend({
     player: true, // Do not remove, used for search functionality elsewhere
     bulletSpeed: .3, // Time in seconds between bullets fired
 
+    offset: {
+        x:-25,
+        y:-15
+    },
+
     init: function() {
         this.delay = new cp.timer(this.bulletSpeed);
 
         // Create and set an animation sheet (image, frame width, frame height)
-        this.animSheet = new cp.animate.sheet('player.png', this.width, this.height);
+        this.animSheet = new cp.animate.sheet('player.png', 75, 55);
 
         // Choose a particular animation sequence from the sheet
         // Anim(sheet, speed in seconds, frame order, repeat)
-        // this.animLeft = new cp.animate.cycle(this.animSheet, 1, [2]);
-        // this.animRight = new cp.animate.cycle(this.animSheet, 1, [1]);
-        this.animCenter = new cp.animate.cycle(this.animSheet, 1, [0], true);
         // this.animUp = new cp.animate.cycle(this.animSheet, 1, [3,4], true);
+        // this.animRight = new cp.animate.cycle(this.animSheet, 1, [1]);
         // this.animDown = new cp.animate.cycle(this.animSheet, 1, [4]);
+        // this.animLeft = new cp.animate.cycle(this.animSheet, 1, [2]);
+        this.animCenter = new cp.animate.cycle(this.animSheet, 1, [0]);
 
         this.animSet = this.animCenter;
     },
@@ -55,11 +60,11 @@ cp.template.Player = cp.template.Entity.extend({
     },
 
     draw: function() {
-        // this._super();
+        this._super();
 
         // Placeholder image
-        cp.ctx.fillStyle = this.color;
-        cp.ctx.fillRect(this.x, this.y, this.width, this.height);
+        // cp.ctx.fillStyle = this.color;
+        // cp.ctx.fillRect(this.x, this.y, this.width, this.height);
     },
 
     collide: function(object) {
