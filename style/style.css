@@ -1,3 +1,63 @@
+/* Begin CSS reset */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+
+/* remember to define visible focus styles! 
+:focus {
+	outline: ?????;
+} */
+
+/* remember to highlight inserts somehow! */
+ins {
+	text-decoration: none;
+}
+del {
+	text-decoration: line-through;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+/* CSS reset ends, real code starts */
+
 body {
     background: #aaa;
     margin: 0;
@@ -17,4 +77,149 @@ body {
     top: 0;
     bottom: 0;
     margin: auto;
+    z-index: 1;
+}
+
+/* Debug - Nav */
+#debug-nav:after {
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: " ";
+    clear: both;
+    height: 0;
+}
+
+.nav-item {
+    width: 50%;
+    display: block;
+    float: left;
+    text-align: center;
+    background: #bbb;
+    color: #fff;
+    text-decoration: none;
+    padding: 5px 0;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.nav-item.active,
+.nav-item.active:hover {
+    background: transparent;
+    color: #555;
+}
+
+.nav-item:hover {
+    background: #777;
+}
+
+.debug-container {
+    font-size: 12px;
+    padding: 15px 20px 10px 20px;
+    position: relative;
+    display: none;
+    min-width: 150px;
+    cursor: pointer;
+}
+
+.debug-container.active {
+    display: block;
+}
+
+/* Debug - General */
+#debug {
+    position: fixed;
+    margin: 10px 0 0 10px;
+    background: #eee;
+    font-family: Arial, Helvetica, sans-serif;
+    border: #999 1px solid;
+    z-index: 0;
+}
+
+.info {
+    position: absolute;
+    top: 7px;
+    right: 7px;
+    width: 23px;
+    height: 23px;
+    cursor: help;
+    background: url('info.png') no-repeat;
+}
+
+.info:hover .info-text {
+    display: block;
+}
+
+.info-text {
+    display: none;
+    background: #212121;
+    width: 300px;
+    color: #fff;
+    padding: 10px;
+    margin-left: -50px;
+}
+
+/* Debug - Statistic information */
+.debug-list {
+    list-style: inside circle;
+    padding: 0;
+    margin: 0;
+}
+
+.stat {
+    margin-bottom: 5px;
+}
+
+.stat-name {
+    font-weight: bold;
+}
+
+.stat-total {
+
+}
+
+.stat-range {
+    font-size: 10px;
+    color: #7f7f7f;
+}
+
+.stat-measure {
+    opacity: .7;
+}
+
+/* Debug - Graph data */
+.graph {
+    margin-bottom: 10px;
+}
+
+.graph-title {
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.graph-range {
+    font-weight: normal;
+    font-size: 11px;
+}
+
+.graph-data {
+    display: block;
+    width: 150px;
+    border: 1px solid #aaa;
+    background: #fff;
+    height: 50px;
+}
+
+.graph-line {
+    display: block;
+    width: 2px;
+    background: #ccc;
+    height: 10px;
+    float: left;
+}
+
+small {
+    font-size: 10px;
+    font-weight: normal;
 }

@@ -1,7 +1,7 @@
 cp.template.Player = cp.template.Entity.extend({
     type: 'a',
-    width: 30,
-    height: 30,
+    width: 75,
+    height: 55,
     x: cp.core.width / 2,
     y: cp.core.height - 250,
     speed: 3,
@@ -13,35 +13,21 @@ cp.template.Player = cp.template.Entity.extend({
         this.delay = new cp.timer(this.bulletSpeed);
 
         // Create and set an animation sheet (image, frame width, frame height)
-        //var animSheet = new AnimSheet('dude.png', 100, 200);
+        this.animSheet = new cp.animate.sheet('player.png', this.width, this.height);
 
         // Choose a particular animation sequence from the sheet
         // Anim(sheet, speed in seconds, frame order, repeat)
-        //this.animLeft = new Anim(animSheet, 1, [2]);
-        //this.animRight = new Anim(animSheet, 1, [1]);
-        //this.animCenter = new Anim(animSheet, 1, [0,1], {
-        //    repeat: true,
-        //    alpha: 1,
-        //    offsetX: 0,
-        //    offsetY: 0,
-        //    flipX: false,
-        //    flipY: false
-        //});
-        //this.animUp = new Anim(animSheet, 1, [3,4], {
-        //    repeat: true,
-        //    alpha: 1,
-        //    offsetX: 0,
-        //    offsetY: 0,
-        //    flipX: false,
-        //    flipY: false
-        //});
-        //this.animDown = new Anim(animSheet, 1, [4]);
-        //
-        //this.animSet = this.animCenter;
+        // this.animLeft = new cp.animate.cycle(this.animSheet, 1, [2]);
+        // this.animRight = new cp.animate.cycle(this.animSheet, 1, [1]);
+        this.animCenter = new cp.animate.cycle(this.animSheet, 1, [0], true);
+        // this.animUp = new cp.animate.cycle(this.animSheet, 1, [3,4], true);
+        // this.animDown = new cp.animate.cycle(this.animSheet, 1, [4]);
+
+        this.animSet = this.animCenter;
     },
 
     update: function() {
-        //this._super();
+        this._super();
 
         // Movement
         if (cp.input.press('left') && this.x > 0) {

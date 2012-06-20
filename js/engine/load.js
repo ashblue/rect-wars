@@ -34,6 +34,8 @@ cp.load = {
             // turn off the animation and run the game
             this.active = false;
             this.callback(); // Set in cp.core.init
+            // Check to see if debugging is active
+            cp.debug.init();
         }
     },
     
@@ -137,7 +139,7 @@ cp.load = {
         var self = this;
         
         // Prep XML HTTP request
-        this.loadXmlHttp.open('GET', 'include/images.php',true);
+        this.loadXmlHttp.open('GET', 'include/image-files.php',true);
         this.loadXmlHttp.send();
         
         // When request is complete
@@ -173,7 +175,7 @@ cp.load = {
         
         // Prep XML http request
         var loadXmlHttp = new XMLHttpRequest();
-        loadXmlHttp.open('GET', 'include/sound.php', true);
+        loadXmlHttp.open('GET', 'include/sound-files.php', true);
         loadXmlHttp.send();
         
         // Request complete logic
