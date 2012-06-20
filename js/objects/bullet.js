@@ -23,11 +23,13 @@ cp.template.Bullet = cp.template.Entity.extend({
       this.angle = cp.math.angle(origin_x, origin_y, target_x, target_y);
     },
     update: function() {
+      this._super();
+      
         this.x = this.x + this.speed * Math.cos(this.angle);
         this.y = this.y + this.speed * Math.sin(this.angle);
         
         //if bullet is outside the screen
-        if (this.x < 0 || this.x > cp.game.width || this.y < 0 || this.y > cp.game.height) {
+        if (this.x < 0 || this.x > cp.core.width || this.y < 0 || this.y > cp.core.height) {
           this.kill();
         }
     },
