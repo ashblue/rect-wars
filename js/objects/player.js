@@ -16,6 +16,7 @@ cp.template.Player = cp.template.Entity.extend({
 
     init: function() {
         this.delay = new cp.timer(this.bulletSpeed);
+        this.centerShipTimer = new cp.timer();
 
         // Create and set an animation sheet (image, frame width, frame height)
         this.animSheet = new cp.animate.sheet('player.png', 75, 55);
@@ -23,9 +24,9 @@ cp.template.Player = cp.template.Entity.extend({
         // Choose a particular animation sequence from the sheet
         // Anim(sheet, speed in seconds, frame order, repeat)
         // this.animUp = new cp.animate.cycle(this.animSheet, 1, [3,4], true);
-        // this.animRight = new cp.animate.cycle(this.animSheet, 1, [1]);
+        this.animRight = new cp.animate.cycle(this.animSheet, 1, [2]);
         // this.animDown = new cp.animate.cycle(this.animSheet, 1, [4]);
-        // this.animLeft = new cp.animate.cycle(this.animSheet, 1, [2]);
+        this.animLeft = new cp.animate.cycle(this.animSheet, 1, [1]);
         this.animCenter = new cp.animate.cycle(this.animSheet, 1, [0]);
 
         this.animSet = this.animCenter;
@@ -36,18 +37,24 @@ cp.template.Player = cp.template.Entity.extend({
 
         // Movement
         if (cp.input.press('left') && this.x > 0) {
-            //this.animSet = this.animLeft;
+            this.centerShipTimer.set(.2);
+            this.centerShipTimer.reset();
+            this.animSet = this.animLeft;
             this.x -= this.speed;
         }
         if (cp.input.press('right') && this.x < cp.core.width - this.width) {
-            //this.animSet = this.animRight;
+            this.centerShipTimer.set(.2);
+            this.centerShipTimer.reset();
+            this.animSet = this.animRight;
             this.x += this.speed;
         }
         if (cp.input.press('up') && this.y > 0) {
+            this.animSet = this.animCenter;
             //this.animSet = this.animUp;
             this.y -= this.speed;
         }
         if (cp.input.press('down') && this.y < cp.core.height - this.height) {
+            this.animSet = this.animCenter;
             //this.animSet = this.animDown;
             this.y += this.speed;
         }
@@ -56,6 +63,11 @@ cp.template.Player = cp.template.Entity.extend({
         if (cp.input.press('shoot') && this.delay.expire()) {
             cp.game.spawn('Laser', this.x + (this.width / 2), this.y);
             this.delay.reset();
+        }
+
+        if (this.centerShipTimer.expire()) {
+            this.centerShipTimer.reset();
+            this.animSet = this.animCenter;
         }
     },
 
