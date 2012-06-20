@@ -1,5 +1,5 @@
 /*------------
-Running The Game 
+Running The Game
 -----------*/
 console.log(cp);
 
@@ -17,7 +17,7 @@ cp.core.init(700, 700, function() {
     cp.input.bind('arrowLeft', 'left');
     cp.input.bind('arrowRight', 'right');
     cp.input.bind('x', 'shoot');
-    
+
     // Spawn objects
     cp.game.spawn('Background');
     cp.game.spawn('Player');

@@ -34,7 +34,7 @@ cp.math = {
             var total = val / base;
         }
         
-        return total.toFixed(round);
+        return Math.round(total * Math.pow(10, round)) / Math.pow(10, round);
     },
     
     // Returns the angle between two points (in radians)
