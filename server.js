@@ -75,6 +75,10 @@ app.get('/include/sound-files.php', function(req, res){
   res.send(soundfiles);
 });
 
-app.listen(3000);
+//add support for Cloud9 IDE
+if(!process.env.C9_PORT) {
+  process.env.C9_PORT = 8080;
+}
+app.listen(process.env.C9_PORT);
 
-console.log("Server is listening...");
+console.log("Server is listening on port " + process.env.C9_PORT + "...");
