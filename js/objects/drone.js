@@ -93,7 +93,7 @@ cp.template.ZigZagDrone = cp.template.Drone.extend({
       }
       
       var next_point = [cp.math.random(min_x, max_x), (-this.height - 5)]; //get the first point
-      
+
       var i = 1;
       var steps = cp.core.height / 100; // move down 100 px at a time
       for (; i <= steps; i++) {
@@ -104,7 +104,7 @@ cp.template.ZigZagDrone = cp.template.Drone.extend({
 
         var path_step = current_point;
         while(path_step[1] < next_point[1]) {
-          this.path_points.push(path_step);          
+          this.path_points.push(path_step);
           path_step = [
             path_step[0] + this.speed * Math.cos(rads),
             path_step[1] + this.speed * Math.sin(rads)
@@ -121,14 +121,13 @@ cp.template.ZigZagDrone = cp.template.Drone.extend({
         this.kill();
         return;
       }
-      
+
       var next_step = this.path_points.shift();
       
       this.x = next_step[0];
       this.y = next_step[1];
     }
 });
-
 
 cp.template.ZigZagDroneWave = cp.template.Entity.extend({    
     init: function(cols) {

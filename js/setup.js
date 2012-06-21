@@ -6,6 +6,8 @@ console.log(cp);
 // Enable debug mode
 cp.debug.active = true;
 
+cp.debug.showCollisions = true;
+
 // List of scripts to load from js/objects
 cp.load.objects = ['background', 'player', 'hazard', 'director', 'bullet', 'drone'];
 
