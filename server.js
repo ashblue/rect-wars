@@ -3,76 +3,51 @@ var express = require('express');
 
 var app = express.createServer();
 
+app.configure(function(){
+    /* setup static folders */
+    app.use('/style', express.static(__dirname + '/style'));
+    app.use('/js', express.static(__dirname + '/js'));
+    app.use('/images', express.static(__dirname + '/images'));
+    app.use('/audio', express.static(__dirname + '/audio'));
+});
+
 app.get('/', function(req, res){
   res.sendfile('index.html');
 });
 
-var staticfiles = [];
-staticfiles.push('style/style.css');
-staticfiles.push('js/depen/animation.js');
-staticfiles.push('js/depen/class_init.js');
-staticfiles.push('js/setup.js');
-var objfiles = fs.readdirSync('js/objects');
-for(f in objfiles) {
-  staticfiles.push('js/objects/' + objfiles[f]);
-}
-var imgfiles = fs.readdirSync('images');
-for(i in imgfiles) {
-  staticfiles.push('images/' + imgfiles[i]);
-}
-for(f in staticfiles) {
-  app.get('/' + staticfiles[f], function(req, res){
-    res.sendfile(req.route.path.substr(1));
-  });
-}
-var oggfiles = fs.readdirSync('audio');
-for(i in oggfiles) {
-  app.get('/audio/' + oggfiles[i], function(req, res){
-    res.writeHead(200,{'Content-Type':'audio/ogg'});
-    var file_stream = fs.createReadStream('.'+req.url);
-    file_stream.on("error", function(exception) {
-      console.error("Error reading file: ", exception);
-    });
-    file_stream.on("data", function(data) {
-      res.write(data);
-    });
-    file_stream.on("close", function() {
-      res.end();
-    });
-  });
-}
-
-var alljs = "";
-var jsfiles = fs.readdirSync('js/engine');
-for(f in jsfiles) {
-  var jsfile = 'js/engine/' + jsfiles[f];
-  if(/.js$/.test(jsfile)) {
-    alljs += fs.readFileSync(jsfile);
+/* combine all engine files into one (/js/engine/all.js) */
+var engine_all_js = "";
+var engine_js_files = fs.readdirSync('js/engine');
+for(i in engine_js_files) {
+  var engine_js_file = 'js/engine/' + engine_js_files[i];
+  if(/.js$/.test(engine_js_file)) {
+    engine_all_js += fs.readFileSync(engine_js_file);
   }
 }
-app.get('/engine-all.js', function(req, res){
-  //res.contentType('application/javascript');
-  res.header('Content-Type', 'application/javascript');
-  res.send(alljs);
+app.get('/js/engine/all.js', function(req, res){
+  res.send(engine_all_js, {'Content-Type': 'application/javascript'});
 });
 
-imgfiles = JSON.stringify(imgfiles);
+
+/* list all image files ( /include/image-files.php )*/
+var img_files = fs.readdirSync('images');
+img_files = JSON.stringify(img_files);
 app.get('/include/image-files.php', function(req, res){
-  res.header('Content-Type', 'text/html');
-  res.send(imgfiles);
+  res.send(img_files, {'Content-Type': 'text/html'});
 });
 
-var soundfiles = [];
-for(i in oggfiles) {
-  var sndfile = oggfiles[i];
+/* list all sound files ( /include/sound-files.php )*/
+var audio_files = fs.readdirSync('audio');
+var sound_files = [];
+for(i in audio_files) {
+  var sndfile = audio_files[i];
   if(/.ogg$/.test(sndfile)) {
-    soundfiles.push(sndfile.replace(".ogg",""));
+    sound_files.push(sndfile.replace(".ogg",""));
   }
 }
-soundfiles = JSON.stringify(soundfiles);
+sound_files = JSON.stringify(sound_files);
 app.get('/include/sound-files.php', function(req, res){
-  res.header('Content-Type', 'text/html');
-  res.send(soundfiles);
+  res.send(sound_files, {'Content-Type': 'text/html'});
 });
 
 //add support for Cloud9 IDE
