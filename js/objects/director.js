@@ -12,10 +12,14 @@ cp.template.Director = cp.template.Entity.extend({
         // Setup your array for how many waves you want
         this.waves = [
             'HazardWave',
+            'ZigZagDroneWave',
             'HazardWave',
+            'ZigZagDroneWave',
             'HazardWave',
+            'ZigZagDroneWave',
             'HazardWave',
-            'HazardWave'
+            'ZigZagDroneWave',
+            'HazardWave',
         ];
     },
     
