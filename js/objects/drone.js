@@ -10,13 +10,12 @@ cp.template.Drone = cp.template.Entity.extend({
     hp: 2,
     color: '#CCCCCC',
     
-    init: function(x, y) {
-      if(x) {
-        this.x = x;
-      }
-      if(y) {
-        this.y = y;
-      }
+    init: function(options) {
+      options = options || {};
+      this.x = options.x || this.x;
+      this.y = options.y || this.y;
+      
+      return options;
     },
 
     collide: function(object) {
@@ -81,16 +80,21 @@ cp.template.DumbDrone = cp.template.Drone.extend({
 cp.template.ZigZagDrone = cp.template.Drone.extend({  
     path_points: [],
     
-    init: function(x,y,min_x,max_x) {
-      this._super(x,y);
-      this.path_points = [];
+    /**
+     * options: {
+     *   x: initial x
+     *   y: initial y
+     *   min_x: farthest point to zig left
+     *   max_x: farthest point to zag right
+     * }
+     */
+    init: function(options) {
+      options = this._super(options);
       
-      if(!min_x) {
-        var min_x = 50;
-      }
-      if(!max_x) {
-        var max_x = cp.core.width - min_x;
-      }
+      var min_x = options.min_x || 50;
+      var max_x = options.max_x || cp.core.width - options.min_x;
+      
+      this.path_points = [];
       
       var next_point = [cp.math.random(min_x, max_x), (-this.height - 5)]; //get the first point
 
@@ -129,20 +133,76 @@ cp.template.ZigZagDrone = cp.template.Drone.extend({
     }
 });
 
-cp.template.ZigZagDroneWave = cp.template.Entity.extend({    
-    init: function(cols) {
-      cp.game.spawn('ZigZagDrone');
-      cp.game.spawn('ZigZagDrone');
-      cp.game.spawn('ZigZagDrone');
-      cp.game.spawn('ZigZagDrone');
-      cp.game.spawn('ZigZagDrone');
+cp.template.ZigZagDroneWave = cp.template.Entity.extend({
+    live_drones: [],
+    delay: 200,
+    count: 0,
+    
+    /**
+     * options = {
+     *   drone_count: number of drones to spawn. default = 5
+     *   swarm: (boolean) true to allow drones to swarm (not stay in columns). default = false
+     * }
+     */
+    init: function(options) {
+      this.live_drones = [];
+      
+      options = options || {};
+      var drone_count = options.drone_count || 5;
+      var swarm = options.swarm || false;
+      
+      if(!swarm) {
+        // -40 for padding on left and right
+        // divided by number of drones
+        var column_width = (cp.core.width - 40) / drone_count;
+      }
+      
+      var i = 0;
+      
+      for(; i < drone_count; i++) {
+        
+        var min_x = 20;
+        var max_x = cp.core.width - min_x;
+        
+        if(!swarm) {
+          // starts at x = 20
+          // +10*i for padding between drones
+          min_x = 30 + (column_width * i);
+          
+          //add column width to starting x above
+          //-10 for padding between
+          max_x = min_x + column_width - (10 * (i+1));      
+          /* *
+          20-120
+          -220
+          -320
+          -420
+          -520
+        
+        0 = 30-110
+        1 = 130-210
+        2 = 230-310
+        3 = 330-410
+        4 = 430-510
+          /* */
+        }
+        this.live_drones.push(cp.game.spawn('ZigZagDrone',{min_x:min_x,max_x:max_x}));
+      }
     },
     
     update: function() {
         this._super();
+        if(this.count > this.delay) {
+          this.kill();
+        }
+        this.count++;
     },
     
     kill: function() {
         this._super();
+        
+        // Get director and set wavesCount to true
+        var director = cp.game.entityGetVal('name','director');
+        director[0].wavesSpawn = true;
     }
 });
