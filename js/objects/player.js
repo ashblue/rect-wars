@@ -8,6 +8,7 @@ cp.template.Player = cp.template.Entity.extend({
     color: '#f00',
     player: true, // Do not remove, used for search functionality elsewhere
     bulletSpeed: .3, // Time in seconds between bullets fired
+    hp: 10,
 
     offset: {
         x:-25,
@@ -33,6 +34,9 @@ cp.template.Player = cp.template.Entity.extend({
     },
 
     update: function() {
+        if(this.hp <= 0) {
+          this.kill();
+        }
         this._super();
 
         // Movement

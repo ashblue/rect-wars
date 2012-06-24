@@ -35,5 +35,21 @@ cp.math = {
         }
         
         return Math.round(total * Math.pow(10, round)) / Math.pow(10, round);
+    },
+    
+    // Returns the angle between two points (in radians)
+    angle: function(x1, y1, x2, y2) {
+        var diff_x = (x1 - x2) * -1;
+        var diff_y = (y1 - y2) * -1;
+        
+        return Math.atan2(diff_y,diff_x);
+    },
+    
+    // Returns the distance between two points.
+    distance: function(x1, y1, x2, y2) {
+        var diff_x = (x1 - x2) * -1;
+        var diff_y = (y1 - y2) * -1;
+        
+        return Math.sqrt( (diff_x * diff_x) + (diff_y * diff_y));
     }
 };
