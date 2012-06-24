@@ -86,6 +86,8 @@ cp.game = {
         }
         
         cp.core.id += 1; // Increment the id so the next shape is a unique variable
+        
+        return entity.id;
     },
     
     // Test if two square objects are overlapping, game's default collision logic
