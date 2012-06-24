@@ -25,7 +25,7 @@ cp.template.Drone = cp.template.Entity.extend({
 
     update: function() {
       //shoot randomly
-      if (cp.math.random(50,1) == 5) {
+      if (cp.math.random(50) == 5) {
         cp.game.spawn('Bullet',this.x, this.y, 350, 350);
       }
     },
@@ -135,8 +135,6 @@ cp.template.ZigZagDrone = cp.template.Drone.extend({
 
 cp.template.ZigZagDroneWave = cp.template.Entity.extend({
     live_drones: [],
-    delay: 200,
-    count: 0,
     
     /**
      * options = {
@@ -160,7 +158,6 @@ cp.template.ZigZagDroneWave = cp.template.Entity.extend({
       var i = 0;
       
       for(; i < drone_count; i++) {
-        
         var min_x = 20;
         var max_x = cp.core.width - min_x;
         
@@ -171,37 +168,33 @@ cp.template.ZigZagDroneWave = cp.template.Entity.extend({
           
           //add column width to starting x above
           //-10 for padding between
-          max_x = min_x + column_width - (10 * (i+1));      
-          /* *
-          20-120
-          -220
-          -320
-          -420
-          -520
-        
-        0 = 30-110
-        1 = 130-210
-        2 = 230-310
-        3 = 330-410
-        4 = 430-510
-          /* */
+          max_x = min_x + column_width - (10 * (i+1)); 
         }
         this.live_drones.push(cp.game.spawn('ZigZagDrone',{min_x:min_x,max_x:max_x}));
       }
     },
     
-    update: function() {
-        this._super();
-        if(this.count > this.delay) {
-          this.kill();
-        }
-        this.count++;
+    update: function() { 
+      // get this first drone in this wave
+      var d = cp.game.entityGetVal('id',this.live_drones[0]);
+      
+      // if the drone does not exist (killed), check the next one
+      while(!d) {
+        //get the next drone in this wave
+        this.live_drones.shift();
+        d = cp.game.entityGetVal('id',this.live_drones[0]);
+      }
+      
+      //if all drones are killed, end wave
+      if (!this.live_drones.length) {
+        this.kill();
+      }
     },
     
     kill: function() {
         this._super();
         
-        // Get director and set wavesCount to true
+        // Get director and set to spawn next wave
         var director = cp.game.entityGetVal('name','director');
         director[0].wavesSpawn = true;
     }
