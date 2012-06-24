@@ -25,8 +25,8 @@ cp.template.Director = cp.template.Entity.extend({
     },
     
     update: function() {
-        // Check if a wave is active
-        if (this.wavesSpawn && this.waves.length) {
+        // Check if a wave is active and there is still a player
+        if (this.wavesSpawn && this.waves.length && cp.game.entityGetVal('player', true)) {
             var wave = this.waves.shift();
             cp.game.spawn(wave.entity, wave.options);
             this.wavesSpawn = false;
