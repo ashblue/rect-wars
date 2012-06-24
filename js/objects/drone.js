@@ -9,6 +9,7 @@ cp.template.Drone = cp.template.Entity.extend({
     delay: -1,
     hp: 2,
     color: '#CCCCCC',
+    accuracy: 0.5, // 0 to 1
     
     init: function(options) {
       options = options || {};
@@ -26,7 +27,18 @@ cp.template.Drone = cp.template.Entity.extend({
     update: function() {
       //shoot randomly
       if (cp.math.random(50) == 5) {
-        cp.game.spawn('Bullet',this.x, this.y, 350, 350);
+        var players = cp.game.entityGetVal('player',true);
+        
+        //if there are players to shoot at
+        if(players) {
+          var player = players[cp.math.random(players.length) - 1];
+          
+          var half_sight_range = (cp.core.width * this.accuracy) / 2;
+          var sight_left = 0 + half_sight_range;
+          var sight_right = cp.core.width - half_sight_range;
+          
+          cp.game.spawn('Bullet',this.x, this.y, cp.math.random(sight_right,sight_left), player.y);
+        }
       }
     },
     
@@ -121,7 +133,6 @@ cp.template.ZigZagDrone = cp.template.Drone.extend({
       this._super();
       
       if (this.path_points.length === 0) {
-        console.log("killing drone");
         this.kill();
         return;
       }
