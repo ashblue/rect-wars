@@ -1,6 +1,3 @@
-Instructions
-=============
-
 # Setup
 
 ## Run requirements
