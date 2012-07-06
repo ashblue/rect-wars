@@ -1,43 +1,19 @@
-Main title
+Instructions
 =============
 
-Intro
+# Setup
 
-1. List
-2. List
-3. List
+## Run requirements
 
-* List
-* List
-* List
+* NodeJS and NodeNPM with the Express package
+* Use Cloud9 (http://c9.io) if you want this to work out of the box without any additional setup
+* Express NPM package automatically taken care of if you use Cloud9
 
-# Title
+## Configuring the setup file
 
+To activate your copy of the game you must create a run file. The run file must be manually created to prevent overwriting other devleoper's environments.
 
-## Sub-Title (Example code)
-
-    var Square = Entity.extend({
-        type: 'a',
-        xAdd: 5,
-        yAdd: 5,
-        width: 50,
-        height: 40,
-        color: '#000',
-        update: function() {
-            if (this.x + this.width > Game.width) { this.x = Game.width - this.width; this.xAdd = this.xAdd * -1; }
-            else if (this.x < 0) { this.x = 0; this.xAdd = this.xAdd * -1; }
-            if (this.y + this.height > Game.height) { this.y = Game.height - this.height; this.yAdd = Game.random(5) * -1; }
-            else if (this.y < 0) { this.y = 0; this.yAdd = this.yAdd * -1; }
-            
-            this.x += this.xAdd;
-            this.y += this.yAdd;
-        },
-        collide: function(object) {
-            this.xAdd = this.xAdd * -1;
-            this.yAdd = this.yAdd * -1;
-        },
-        draw: function() {
-            Game.ctx.fillStyle = this.color;
-            Game.ctx.fillRect(this.x,this.y,this.width,this.height);
-        }
-    });
+1. Make of copy of js/setup.diff in the exact same folder
+2. Rename the copy setup.js
+3. Add your own custom setup.js code
+4. Run index.html and the game should run as expected
