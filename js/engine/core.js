@@ -66,6 +66,8 @@ cp.core = {
             
             cp.audio.init();
             
+            cp.storage.init();  
+            
             // Activate keyboard keys
             cp.input.init();
             
