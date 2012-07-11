@@ -42,8 +42,6 @@ cp.template.Background = cp.template.Entity.extend({
         
         // Reset global alpha to prevent screwing up other images
         cp.ctx.globalAlpha = 1;
-        
-        console.log(this.stars.length);
     }
 });
 
