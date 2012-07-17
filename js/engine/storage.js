@@ -12,18 +12,15 @@ Example usage:
 
 - Remove
   cp.storage.remove('name');
-  
+
 - Get
   cp.storage.get('name');
-  
-TODO: Might want to consider providing some kind of system crash error in-case
-the user has local storage disabled for some stupid reason.
 */
 
 var cp = cp || {};
 
-(function(cp, window) {
-    var support = function() {
+(function(cp) {
+    var _support = function() {
         try {
             cp.storage.save('test', 'asdf');
             cp.storage.remove('test');
@@ -31,32 +28,67 @@ var cp = cp || {};
         } catch(e) {
             return false;
         }
-    };
+    },
     
+    // Storage location for quicker access to web storage data
+    // Source: http://jsperf.com/web-storage-retrieval
+    _cache,
+    
+    _buildCache = function() {
+        // Reset current cache
+        _cache = {};
+
+        // Start loop
+        for (var i = sessionStorage.length; i--;) {
+            // Get the storage key
+            var key = sessionStorage.key(i);
+
+            // Get the result
+            var result = sessionStorage.getItem(key);
+
+            // Dump gathered data into JSON object
+            _cache[key] = result;
+        }
+        
+        return;
+    };
+
     cp.storage = {
         init: function() {
-            if (! this.support) {
+            if (! _support) {
                 return alert('Local storage is broken or disabled, please enable it to continue.');
             }
+            
+            _buildCache(); 
+            
+            return this;
         },
-        
+
         // Saves the passed parameter with a key or tag reference
         save: function(key, value) {
             // Set local storage data internally
             sessionStorage.setItem(key, value);
+            
+            // Set cached value
+            _cache[key] = value;
+            
+            return this;
         },
-        
+
         // Gets select data, should be using build to retrieve
         get: function(key) {
-            var result = sessionStorage.getItem(key);
-            
-            return result;
+            return _cache[key];
         },
-        
+
         // Removes the passed paramater
         remove: function(key) {
             // Set local data
             sessionStorage.removeItem(key);
+            
+            // Delete cached key
+            delete _cache[key];
+            
+            return this;
         }
     };
-}(cp, window));
+}(cp));
