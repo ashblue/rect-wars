@@ -24,6 +24,7 @@ cp.template.Hazard = cp.template.Entity.extend({
     },
     
     collide: function(object) {
+        object.hp -= 1;
         for(var obj = this.partCount; obj > 0; obj--) {
             cp.game.spawn('HazardMini', this.x, this.y);
         }

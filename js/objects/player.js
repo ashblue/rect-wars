@@ -8,7 +8,7 @@ cp.template.Player = cp.template.Entity.extend({
     color: '#f00',
     player: true, // Do not remove, used for search functionality elsewhere
     bulletSpeed: .3, // Time in seconds between bullets fired
-    hp: 10,
+    hp: 1,
 
     offset: {
         x:-25,
