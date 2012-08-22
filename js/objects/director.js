@@ -10,7 +10,7 @@ cp.template.Director = cp.template.Entity.extend({
     
     init: function() {
       this.waves = [];
-      var i = 1;
+      var i = 3;
       for(; i<=100;i++) {
         this.waves.push({entity: 'HazardWave'});
         var dronewave = {entity: 'DroneZaggerWave', options: {drone_count: i}};
