@@ -10,7 +10,7 @@ cp.debug.active = true;
 cp.debug.showCollisions = true;
 
 // List of scripts to load from js/objects
-cp.load.objects = ['background', 'player', 'hazard', 'director', 'bullet', 'drone'];
+cp.load.objects = ['background', 'player', 'hazard', 'director', 'bullet', 'drone', 'drone-slowbot', 'drone-zagger', 'drone-carrier', 'drone-mini'];
 
 // init(width, height, run onLoad function)
 cp.core.init(700, 700, function() {
