@@ -37,6 +37,7 @@ cp.template.DroneZagger = cp.template.Drone.extend({
         }
       }
     },
+    
     update: function() {
       
       this._super();
@@ -50,6 +51,11 @@ cp.template.DroneZagger = cp.template.Drone.extend({
       
       this.x = next_step[0];
       this.y = next_step[1];
+      
+      //shoot randomly
+      if (cp.math.random(50) == 5) {
+          this.fireAtPlayer();
+      }
     }
 });
 
