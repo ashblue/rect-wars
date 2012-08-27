@@ -33,7 +33,6 @@
                 }
 
                 // Show the nav target
-                console.log(Sizzle('#' + navId));
                 Sizzle('#' + navId)[0].classList.remove('hide');
             }
         }

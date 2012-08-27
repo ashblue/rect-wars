@@ -168,6 +168,58 @@ body {
 	background: url('images/cursor.png') no-repeat 0 50%;
 }
 
+#screen-history {
+	top: 38%;
+}
+
+.nav-info {
+	font-size: 18px;
+	text-align: left;
+	margin: 0 0 10px 30px;
+	display: block;
+}
+
+.history-table {
+	font-size: 40px;
+	margin: 0 30px 20px 30px;
+	width: 640px;
+}
+
+.history-table td {
+	padding: 8px 15px;
+	text-align: left;
+}
+
+.history-table td + td {
+	text-align: right;
+}
+
+.history-table tr:nth-child(odd) {
+	background: rgba(255, 255, 255, .08);
+}
+
+.nav-mini {
+	position: absolute;
+	bottom: 0;
+	right: 30px;
+}
+
+.nav-mini-link {
+	width: 50px;
+	height: 50px;
+	display: block;
+	text-indent: -9999px;
+	display: inline-block;
+}
+
+.nav-prev {
+	background: url('images/nav-prev.png') no-repeat;
+}
+
+.nav-next {
+	background: url('images/nav-next.png') no-repeat;
+}
+
 /**
  * Debug Navigation
  */

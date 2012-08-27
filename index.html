@@ -13,7 +13,6 @@
             Download Google Chrome to play this game now!
         </canvas>
         <div id="screen-intro" class="hide">
-            <div id="screen-intro-center">
 
                 <div id="screen-home" class="screen-modal">
                     <ul class="screen-nav">
@@ -23,7 +22,7 @@
                             </a>
                         </li>
                         <li class="screen-nav-item">
-                            <a class="screen-nav-link" href="#">
+                            <a data-nav="screen-history" class="screen-nav-link" href="#">
                                 character history
                             </a>
                         </li>
@@ -71,9 +70,45 @@
                 </div>
 
                 <div id="screen-history" class="screen-modal hide">
+                    <span id="history-nav" class="nav-info">1 - 5 of 13</span>
+                    <table id="history-table" class="history-table">
+                        <colgroup>
+                            <col class="table-title" />
+                            <col class="table-data" />
+                        </colgroup>
+                        <tr>
+                            <td>playtime</td>
+                            <td>30 min</td>
+                        </tr>
+                        <tr>
+                            <td>minion kills</td>
+                            <td>4789</td>
+                        </tr>
+                        <tr>
+                            <td>boss kills</td>
+                            <td>20</td>
+                        </tr>
+                        <tr>
+                            <td>bullets fired</td>
+                            <td>207845</td>
+                        </tr>
+                        <tr>
+                            <td>special attacks</td>
+                            <td>43</td>
+                        </tr>
+                    </table>
 
+                    <span class="screen-nav-item">
+                        <a data-nav="screen-home" class="screen-nav-link active" href="#">
+                            back
+                        </a>
+                    </span>
+
+                    <nav class="nav-mini">
+                        <a class="nav-mini-link nav-prev" href="#">Previous</a>
+                        <a class="nav-mini-link nav-next" href="#">Next</a>
+                    </nav>
                 </div>
-            </div>
         </div>
     </div>
 
