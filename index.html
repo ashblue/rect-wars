@@ -12,11 +12,75 @@
         <canvas id="canvas">
             Download Google Chrome to play this game now!
         </canvas>
+        <div id="screen-intro" class="hide">
+            <div id="screen-intro-center">
+
+                <div id="screen-home" class="screen-modal">
+                    <ul class="screen-nav">
+                        <li class="screen-nav-item">
+                            <a data-nav="screen-levels" class="screen-nav-link active" href="#">
+                                play game
+                            </a>
+                        </li>
+                        <li class="screen-nav-item">
+                            <a class="screen-nav-link" href="#">
+                                character history
+                            </a>
+                        </li>
+                        <li class="screen-nav-item">
+                            <a class="screen-nav-link" href="#">
+                                achievements
+                            </a>
+                        </li>
+                        <li class="screen-nav-item">
+                            <a class="screen-nav-link" href="#">
+                                credits
+                            </a>
+                        </li>
+                        <li class="screen-nav-item">
+                            <a class="screen-nav-link" href="#">
+                                options
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div id="screen-levels" class="screen-modal hide">
+                    <ul class="screen-nav">
+                        <li class="screen-nav-item">
+                            <a class="screen-nav-link active" href="#">
+                                lv1 - cyberspace
+                            </a>
+                        </li>
+                        <li class="screen-nav-item">
+                            <a class="screen-nav-link" href="#">
+                                lv2 - nodeville
+                            </a>
+                        </li>
+                        <li class="screen-nav-item">
+                            <a class="screen-nav-link" href="#">
+                                lv3 - server grid
+                            </a>
+                        </li>
+                        <li class="screen-nav-item">
+                            <a data-nav="screen-home" class="screen-nav-link" href="#">
+                                back
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div id="screen-history" class="screen-modal hide">
+
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Load dependencies -->
     <script type="text/javascript" src="js/depen/animation.js"></script>
     <script type="text/javascript" src="js/depen/class_init.js"></script>
+    <script type="text/javascript" src="js/lib/sizzle.js"></script>
 
     <!-- Load all files in development -->
     <script type="text/javascript" src="js/engine/all.js"></script>
@@ -26,5 +90,3 @@
 </body>
 
 </html>
-
-
