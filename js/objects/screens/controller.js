@@ -1,5 +1,6 @@
 /**
  * @todo Logo should probably be animated and an actual image sprite
+ * @todo Remove sizzle, not necessary
  */
 (function (cp) {
     /** @type {object} DOM element for the intro screen */
@@ -20,11 +21,40 @@
     /** @type {number} X point to draw the logo at the center */
     var _logoCenterX = null;
 
+    /** @type {object} DOM container for scrolling credits */
+    var _creditScroll = document.getElementById('credit-scroll');
+
+    /** @type {object} DOM outer div for scrolling */
+    var _creditScrollOuter = document.getElementById('credit-roll');
+
+    /** @type {timer} Contains the timer for credits */
+    var _creditTimer = null;
+
+    var _private = {
+        startCredits: function () {
+            _creditScroll.style.marginTop = 0;
+            var heightMax = _creditScroll.clientHeight + _creditScrollOuter.clientHeight;
+
+            _creditTimer = window.setInterval(function () {
+                var marginTop = parseFloat(_creditScroll.style.marginTop) - 1;
+                if (marginTop <= -heightMax) {
+                    _private.stopCredits();
+                }
+
+                _creditScroll.style.marginTop = marginTop.toString() + 'px';
+            }, 20);
+        },
+
+        stopCredits: function () {
+            window.clearInterval(_creditTimer);
+        }
+    };
+
     var _events = {
         navigate: function (e) {
             e.preventDefault();
 
-            // Get the target
+            // Navigate to a specific target
             var navId = this.dataset.nav;
             if (navId !== undefined) {
                 // Hide all modals
@@ -34,6 +64,14 @@
 
                 // Show the nav target
                 Sizzle('#' + navId)[0].classList.remove('hide');
+            }
+
+            // Scrolling command?
+            var creditsCommand = this.dataset.credits;
+            if (creditsCommand === 'start') {
+                _private.startCredits();
+            } else if (creditsCommand === 'stop') {
+                _private.stopCredits();
             }
         }
     };

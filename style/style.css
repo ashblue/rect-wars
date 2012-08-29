@@ -198,6 +198,67 @@ body {
 	background: rgba(255, 255, 255, .08);
 }
 
+#screen-achievements {
+	top: 42%;
+}
+
+.achievement-list {
+	margin: 0 30px 0 30px;
+	text-align: left;
+	letter-spacing: 1px;
+}
+
+.achievement-item {
+	margin-bottom: 20px;
+	padding: 10px 15px;
+	background: url('images/checkbox.png') no-repeat 584px 50% rgba(255, 255, 255, .08);
+}
+
+.achievement-item.active {
+	background-image: url('images/checkbox-active.png');
+}
+
+.achievement-title {
+	display: block;
+	font-size: 24px;
+	margin-bottom: 5px;
+}
+
+.achievement-desc {
+	display: block;
+	font-size: 18px;
+}
+
+#screen-credits {
+	top: 38%;
+}
+
+.credit-roll {
+	height: 340px;
+	overflow: hidden;
+}
+
+.credit-title {
+	font-size: 34px;
+	letter-spacing: 1px;
+	margin-bottom: 10px;
+	display: block;
+}
+
+.credit-title:first-child {
+	margin-top: 300px;
+}
+
+.credit-list {
+	font-size: 25px;
+	letter-spacing: 1px;
+	margin-bottom: 30px;
+}
+
+.credit-list li {
+	margin-bottom: 10px;
+}
+
 .nav-mini {
 	position: absolute;
 	bottom: 0;
