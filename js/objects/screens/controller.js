@@ -1,6 +1,7 @@
 /**
  * @todo Logo should probably be animated and an actual image sprite
  * @todo Remove sizzle, not necessary
+ * @todo Prevent default up, down, left, and right
  */
 (function (cp) {
     /** @type {object} DOM element for the intro screen */
@@ -11,6 +12,9 @@
 
     /** @type {array} All modals that contain intro screen information */
     var SCREENS = Sizzle('.screen-modal');
+
+    /** @type {object} Currently active DOM screen */
+    var _activeScreen = Sizzle('#screen-home')[0];
 
     /** @type {object} Image object */
     var _logoImg = null;
@@ -62,8 +66,15 @@
                     SCREENS[i].classList.add('hide');
                 }
 
-                // Show the nav target
-                Sizzle('#' + navId)[0].classList.remove('hide');
+                // Show the nav target and set the cursor to the top
+                _activeScreen = Sizzle('#' + navId)[0];
+                var links = _activeScreen.getElementsByClassName('screen-nav-link');
+                for (var i = links.length; i--;) {
+                    links[i].classList.remove('active');
+                }
+                links[0].classList.add('active');
+
+                _activeScreen.classList.remove('hide');
             }
 
             // Scrolling command?
@@ -73,6 +84,18 @@
             } else if (creditsCommand === 'stop') {
                 _private.stopCredits();
             }
+        },
+
+        hover: function (e) {
+            var links = _activeScreen.getElementsByClassName('screen-nav-link');
+            for (var i = links.length; i--;) {
+                links[i].classList.remove('active');
+            }
+            e.target.classList.add('active');
+        },
+
+        stopScrolling: function (e) {
+            e.preventDefault();
         }
     };
 
@@ -101,6 +124,36 @@
         },
 
         update: function () {
+            if (cp.input.down('down')) {
+                // Get all links
+                var links = _activeScreen.getElementsByClassName('screen-nav-link'),
+                    replaceNext = null;
+                for (var i = 0; i < links.length; i++) {
+                    if (links[i].className === 'screen-nav-link active' && i !== links.length - 1) {
+                        links[i].classList.remove('active');
+                        replaceNext = true;
+                    } else if (replaceNext === true) {
+                        return links[i].classList.add('active');
+                    }
+                }
+            } else if (cp.input.down('up')) {
+                var links = _activeScreen.getElementsByClassName('screen-nav-link'),
+                    replaceNext = null;
+                for (var i = links.length; i--;) {
+                    if (links[i].className === 'screen-nav-link active' && i !== 0) {
+                        links[i].classList.remove('active');
+                        replaceNext = true;
+                    } else if (replaceNext === true) {
+                        return links[i].classList.add('active');
+                    }
+                }
+            } else if (cp.input.down('submit') || cp.input.down('space')) {
+                // get active link and click it
+                _activeScreen
+                    .getElementsByClassName('screen-nav-link active')[0]
+                    .click();
+            }
+
             return;
         },
 
@@ -116,7 +169,10 @@
         bind: function () {
             for (var i = LINKS.length; i--;) {
                 LINKS[i].addEventListener('click', _events.navigate);
+                LINKS[i].addEventListener('mouseover', _events.hover);
             }
+
+            window.addEventListener('keydown', _events.stopScrolling);
         },
 
         /**
