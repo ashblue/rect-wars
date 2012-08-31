@@ -4,6 +4,12 @@
  * @todo Prevent default up, down, left, and right
  */
 (function (cp) {
+    /** @type {object} Reference to the screen CP entity */
+    var SELF = null;
+
+    /** @type {object} Background entity */
+    var BACKGROUND = null;
+
     /** @type {object} DOM element for the intro screen */
     var INTRO_SCREEN = Sizzle('#screen-intro')[0];
 
@@ -54,6 +60,26 @@
         }
     };
 
+    /** @type {object} Scripts that can be run through a data-script attribute */
+    var _scripts = {
+        startLv1: function () {
+            console.log('lv 1 start logic here');
+
+            // Cleanup logic
+            SELF.kill();
+            SELF = null;
+            BACKGROUND.kill();
+            BACKGROUND = null;
+
+            // Run the actual level
+            cp.game.spawn('Level1');
+        },
+
+        comingSoon: function () {
+            alert('We\'re currently working on levels 2 and 3, check back soon');
+        }
+    };
+
     var _events = {
         navigate: function (e) {
             e.preventDefault();
@@ -86,6 +112,13 @@
             }
         },
 
+        runScript: function (e) {
+            e.preventDefault();
+
+            var scriptName = this.dataset.script;
+            _scripts[scriptName]();
+        },
+
         hover: function (e) {
             var links = _activeScreen.getElementsByClassName('screen-nav-link');
             for (var i = links.length; i--;) {
@@ -105,6 +138,9 @@
         height: cp.core.height,
 
         init: function () {
+            SELF = this;
+            BACKGROUND = cp.game.entityGetVal('id', cp.game.spawn('Background'))[0];
+
             // Show intro screen
             INTRO_SCREEN.classList.remove('hide');
 
@@ -161,6 +197,8 @@
             if (_logoRdy) {
                 cp.ctx.drawImage(_logoImg, _logoCenterX, 75);
             }
+
+            return;
         },
 
         /**
@@ -168,18 +206,41 @@
          */
         bind: function () {
             for (var i = LINKS.length; i--;) {
-                LINKS[i].addEventListener('click', _events.navigate);
+                if (LINKS[i].dataset.script) {
+                    LINKS[i].addEventListener('click', _events.runScript);
+                } else {
+                    LINKS[i].addEventListener('click', _events.navigate);
+                }
+
                 LINKS[i].addEventListener('mouseover', _events.hover);
             }
 
-            window.addEventListener('keydown', _events.stopScrolling);
+            //window.addEventListener('keydown', _events.stopScrolling);
         },
 
         /**
          * Destroy all events that have been binded, fired in the kill() method
          */
         unbind: function () {
+            for (var i = LINKS.length; i--;) {
+                if (LINKS[i].dataset.script) {
+                    LINKS[i].addEventListener('click', _events.runScript);
+                } else {
+                    LINKS[i].addEventListener('click', _events.navigate);
+                }
 
+                LINKS[i].addEventListener('mouseover', _events.hover);
+            }
+
+            cp.input.unbindAll();
+        },
+
+        kill: function () {
+            INTRO_SCREEN.classList.add('hide');
+
+            this.unbind();
+
+            this._super();
         }
     });
 }(cp));
