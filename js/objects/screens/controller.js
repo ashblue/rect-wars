@@ -22,8 +22,14 @@
     /** @type {object} DOM element used to scroll the history table */
     var HISTORY_CONTAINER = document.getElementById('history-table-scroll');
 
+    /** @type {object} DOM navigation counter for history table */
+    var HISTORY_NAV = document.getElementById('history-nav');
+
     /** @type {object} DOM element used to scroll achievement items */
     var ACHIEVEMENT_CONTAINER = document.getElementById('achievements-scroll');
+
+    /** @type {object} DOM navigation counter for achievements */
+    var ACHIEVEMENT_NAV = document.getElementById('achievements-nav');
 
     /** @type {object} Currently active DOM screen */
     var _activeScreen = Sizzle('#screen-home')[0];
@@ -47,6 +53,9 @@
     var _creditTimer = null;
 
     var _private = {
+        /**
+         * Runs the credit scrolling and sets the default starting position
+         */
         startCredits: function () {
             _creditScroll.style.marginTop = 0;
             var heightMax = _creditScroll.clientHeight + _creditScrollOuter.clientHeight;
@@ -61,8 +70,23 @@
             }, 20);
         },
 
+        /**
+         * Ends the credit scrolling
+         */
         stopCredits: function () {
             window.clearInterval(_creditTimer);
+        },
+
+        /**
+         * Creates the navigation text for history and achievements
+         * @param {object} elTarget DOM element where text should be re-placed
+         * @param {array} elSource
+         * @param {number} increment How much does the nav increment each time somebody
+         * scrolls?
+         * @returns {undefined}
+         */
+        setNavNumbers: function (elTarget, elSource, increment) {
+            elTarget.innerHTML = '1 - ' + increment + ' of ' + elSource.length;
         }
     };
 
@@ -135,6 +159,26 @@
 
         stopScrolling: function (e) {
             e.preventDefault();
+        },
+
+        scrollContainer: function (e) {
+            e.preventDefault();
+
+            // Get the target
+            var target = document.getElementById(e.target.dataset.target);
+
+            // Get the target's attributes we need for scrolling
+            var height = parseInt(target.parentElement.style.height, 10);
+            var marginTop = parseInt(target.style.marginTop, 10) || 0;
+
+            // Depending upon the direction, scroll up or down
+            if (e.target.dataset.direction === 'down' && marginTop > -parseInt(target.parentElement.dataset.maxheight, 10) - marginTop) {
+                target.style.marginTop = -height + marginTop + 'px';
+            } else if (e.target.dataset.direction === 'up' && marginTop !== 0) {
+                target.style.marginTop = height + marginTop + 'px';
+            }
+
+            // Update the nav counter
         }
     };
 
@@ -242,14 +286,18 @@
             // Declare all link items here since they've been successfully created
             LINKS = Sizzle('#screen-intro a');
 
-            // Set height of history table
-            var tableLine = Sizzle('#history-table tr:first')[0];
-            HISTORY_CONTAINER.style.height = tableLine.clientHeight * 5 + 'px';
+            // Set height of history table and nav text
+            var tableLine = Sizzle('#history-table tr');
+            var tableContainer = document.getElementById('history-table-container');
+            tableContainer.style.height = tableLine[0].clientHeight * 5 + 'px';
+            tableContainer.dataset.maxheight = tableLine[0].clientHeight * tableLine.length;
+            _private.setNavNumbers(HISTORY_NAV, tableLine, 5);
 
             // Set height of achievements
             var achLine = document.getElementsByClassName('achievement-item');
-            ACHIEVEMENT_CONTAINER.style.height = achLine[0].clientHeight * 3 + 20 * 3 + 'px'; // For some odd reason the height isn't reporting back correctly
-            console.log(achLine[0].style);
+            ACHIEVEMENT_CONTAINER.parentElement.style.height = achLine[0].clientHeight * 3 + 20 * 3 + 'px'; // For some odd reason the height isn't reporting back correctly
+            ACHIEVEMENT_CONTAINER.parentElement.dataset.maxheight = achLine[0].clientHeight * achLine.length + (20 * achLine.length);
+            _private.setNavNumbers(ACHIEVEMENT_NAV, achLine, 3);
 
             // Setup all navigation
             this.bind();
@@ -307,9 +355,17 @@
          * Bind all events
          */
         bind: function () {
+            // Attach proper even listeners to all links
             for (var i = LINKS.length; i--;) {
+                // Logic for running scripts via data attribute
                 if (LINKS[i].dataset.script) {
                     LINKS[i].addEventListener('click', _events.runScript);
+
+                // Add scrolling to mini navs
+                } else if (LINKS[i].dataset.direction) {
+                    LINKS[i].addEventListener('click', _events.scrollContainer);
+
+                // Set click to navigate events where necessary
                 } else {
                     LINKS[i].addEventListener('click', _events.navigate);
                 }
@@ -324,15 +380,15 @@
          * Destroy all events that have been binded, fired in the kill() method
          */
         unbind: function () {
-            for (var i = LINKS.length; i--;) {
-                if (LINKS[i].dataset.script) {
-                    LINKS[i].addEventListener('click', _events.runScript);
-                } else {
-                    LINKS[i].addEventListener('click', _events.navigate);
-                }
-
-                LINKS[i].addEventListener('mouseover', _events.hover);
-            }
+            //for (var i = LINKS.length; i--;) {
+            //    if (LINKS[i].dataset.script) {
+            //        LINKS[i].addEventListener('click', _events.runScript);
+            //    } else {
+            //        LINKS[i].addEventListener('click', _events.navigate);
+            //    }
+            //
+            //    LINKS[i].addEventListener('mouseover', _events.hover);
+            //}
 
             cp.input.unbindAll();
         },

@@ -72,13 +72,15 @@
 
             <div id="screen-history" class="screen-modal">
                 <span id="history-nav" class="nav-info">1 - 5 of 13</span>
-                <div id="history-table-scroll" class="hide-overflow">
-                    <table id="history-table" class="history-table">
-                        <colgroup>
-                            <col class="table-title" />
-                            <col class="table-data" />
-                        </colgroup>
-                    </table>
+                <div id="history-table-container" class="hide-overflow">
+                    <div id="history-table-scroll">
+                        <table id="history-table" class="history-table">
+                            <colgroup>
+                                <col class="table-title" />
+                                <col class="table-data" />
+                            </colgroup>
+                        </table>
+                    </div>
                 </div>
 
                 <span class="screen-nav-item">
@@ -88,16 +90,18 @@
                 </span>
 
                 <nav class="nav-mini">
-                    <a class="nav-mini-link nav-prev" href="#">Previous</a>
-                    <a class="nav-mini-link nav-next" href="#">Next</a>
+                    <a class="nav-mini-link nav-prev" href="#" data-target="history-table-scroll" data-direction="down">down</a>
+                    <a class="nav-mini-link nav-next" href="#" data-target="history-table-scroll" data-direction="up">up</a>
                 </nav>
             </div>
 
             <div id="screen-achievements" class="screen-modal">
                 <span id="achievements-nav" class="nav-info">1 - 3 of 27</span>
 
-                <div id="achievements-scroll" class="hide-overflow">
-                    <ul id="achievements" class="achievement-list"></ul>
+                <div id="achievements-container" class="hide-overflow">
+                    <div id="achievements-scroll">
+                        <ul id="achievements" class="achievement-list"></ul>
+                    </div>
                 </div>
 
                 <span class="screen-nav-item">
@@ -107,8 +111,8 @@
                 </span>
 
                 <nav class="nav-mini">
-                    <a class="nav-mini-link nav-prev" href="#">Previous</a>
-                    <a class="nav-mini-link nav-next" href="#">Next</a>
+                    <a class="nav-mini-link nav-prev" href="#" data-target="achievements-scroll" data-direction="down">down</a>
+                    <a class="nav-mini-link nav-next" href="#" data-target="achievements-scroll" data-direction="up">up</a>
                 </nav>
             </div>
 
