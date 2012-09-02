@@ -19,6 +19,12 @@
     /** @type {array} All modals that contain intro screen information */
     var SCREENS = Sizzle('.screen-modal');
 
+    /** @type {object} DOM element used to scroll the history table */
+    var HISTORY_CONTAINER = document.getElementById('history-table-scroll');
+
+    /** @type {object} DOM element used to scroll achievement items */
+    var ACHIEVEMENT_CONTAINER = document.getElementById('achievements-scroll');
+
     /** @type {object} Currently active DOM screen */
     var _activeScreen = Sizzle('#screen-home')[0];
 
@@ -233,10 +239,26 @@
                 optionList.insertBefore(lineItem, optionListFirst);
             }
 
+            // Declare all link items here since they've been successfully created
             LINKS = Sizzle('#screen-intro a');
+
+            // Set height of history table
+            var tableLine = Sizzle('#history-table tr:first')[0];
+            HISTORY_CONTAINER.style.height = tableLine.clientHeight * 5 + 'px';
+
+            // Set height of achievements
+            var achLine = document.getElementsByClassName('achievement-item');
+            ACHIEVEMENT_CONTAINER.style.height = achLine[0].clientHeight * 3 + 20 * 3 + 'px'; // For some odd reason the height isn't reporting back correctly
+            console.log(achLine[0].style);
 
             // Setup all navigation
             this.bind();
+
+            // Hide everything except first item, do this last so heights can be retreived
+            var modals = document.getElementsByClassName('screen-modal');
+            for (i = 1; i < modals.length; i++) {
+                modals[i].classList.add('hide');
+            }
         },
 
         update: function () {

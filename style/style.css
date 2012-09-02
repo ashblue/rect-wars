@@ -179,9 +179,13 @@ body {
 	display: block;
 }
 
+#history-table-scroll {
+	margin-bottom: 20px;
+}
+
 .history-table {
 	font-size: 40px;
-	margin: 0 30px 20px 30px;
+	margin: 0 30px 0 30px;
 	width: 640px;
 }
 
@@ -235,6 +239,9 @@ body {
 
 .credit-roll {
 	height: 340px;
+}
+
+.hide-overflow {
 	overflow: hidden;
 }
 
