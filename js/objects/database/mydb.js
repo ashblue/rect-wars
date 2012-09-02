@@ -86,9 +86,11 @@ var myDB = myDB || {};
             _data = {};
 
             // Loop through all of the data items
+            var writeTotal = 0, writeCount = 1;
             for (var i = writeData.length; i--;) {
                 var table = writeData[i].table;
                 _data[table] = [];
+                writeTotal += 1;
 
                 // getTable for each with a callback that appends to the cache
                 db.getTable(table, function(e) {
@@ -96,6 +98,10 @@ var myDB = myDB || {};
                     if (cursor) {
                         _data[cursor.source.name].push(cursor.value);
                         cursor.continue();
+                    } else if (writeTotal === writeCount) {
+                        myDB.setSuccess();
+                    } else if (cursor === null) {
+                        writeCount += 1;
                     }
                 });
             }
@@ -500,7 +506,7 @@ var myDB = myDB || {};
      * for example you might look for a key of 'name' and value of 'Joe'
      * @returns {object} Only returns one line or an empty object
      */
-    getTableLine = function (table, key, value) {
+    myDB.getTableLine = function (table, key, value) {
         return myDB.getDB.getDataTableKey(table, key, value);
     };
 
@@ -511,9 +517,16 @@ var myDB = myDB || {};
      * 'name' key it might look like {name: 'joe'}
      * @returns {self}
      */
-    setTableLine = function (table, key, keyName, value) {
+    myDB.setTableLine = function (table, key, keyName, value) {
         myDB.getDB.setData(table, key, keyName, value);
         return this;
+    };
+
+    /**
+     * On successful database retrieval callback
+     */
+    myDB.setSuccess = function() {
+
     };
 
     myDB.init();

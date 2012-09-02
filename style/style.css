@@ -281,6 +281,10 @@ body {
 	background: url('images/nav-next.png') no-repeat;
 }
 
+.disabled {
+	opacity: 0.4;
+}
+
 /**
  * Debug Navigation
  */

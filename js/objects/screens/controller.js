@@ -14,7 +14,7 @@
     var INTRO_SCREEN = Sizzle('#screen-intro')[0];
 
     /** @type {array} All intro screen links */
-    var LINKS = Sizzle('#screen-intro a');
+    var LINKS = null;
 
     /** @type {array} All modals that contain intro screen information */
     var SCREENS = Sizzle('.screen-modal');
@@ -144,9 +144,6 @@
             // Show intro screen
             INTRO_SCREEN.classList.remove('hide');
 
-            // Setup all navigation
-            this.bind();
-
             // Get the logo setup
             _logoImg = new Image();
             _logoImg.src = 'images/logo.png';
@@ -157,6 +154,89 @@
                 // Center the logo
                 _logoCenterX = (cp.core.width - _logoImg.width) / 2;
             };
+
+            // Get levels and give them a disabled class if they aren't available
+            var levelData = myDB.getTable('levels');
+            var levelItems = Sizzle('#screen-intro a[data-script]');
+            for (var i = 0; i < levelData.length; i++) {
+                if (levelData[i].unlocked === false) {
+                    levelItems[i].classList.add('disabled');
+                }
+            }
+
+            // Get character history items and output them
+            var statData = myDB.getTable('stats');
+            var statTable = document.getElementById('history-table');
+            var lineItem, lineTitle, lineData;
+            for (i = 0; i < statData.length; i++) {
+                lineItem = document.createElement('tr');
+
+                lineTitle = document.createElement('td');
+                lineTitle.innerHTML = statData[i].info;
+                lineItem.appendChild(lineTitle);
+
+                lineData = document.createElement('td');
+                lineData.innerHTML = statData[i].data;
+                lineItem.appendChild(lineData);
+
+                statTable.appendChild(lineItem);
+            }
+
+            // Get achievements and output them
+            var achieveData = myDB.getTable('achievements');
+            var achieveList = document.getElementById('achievements');
+            for (i = 0; i < achieveData.length; i++) {
+                lineItem = document.createElement('li');
+                lineItem.classList.add('achievement-item');
+
+                // Add active class if its unlocked
+                if (achieveData[i].unlocked === true) {
+                    lineItem.classList.add('active');
+                }
+
+                lineTitle = document.createElement('span');
+                lineTitle.classList.add('achievement-title');
+                lineTitle.innerHTML = achieveData[i].name;
+                lineItem.appendChild(lineTitle);
+
+                lineData = document.createElement('span');
+                lineData.classList.add('achievement-desc');
+                lineData.innerHTML = achieveData[i].desc;
+                lineItem.appendChild(lineData);
+
+                achieveList.appendChild(lineItem);
+            }
+
+            // Get options
+            var optionData = myDB.getTable('options');
+            var optionList = Sizzle('#screen-options ul')[0];
+            var optionListFirst = optionList.firstChild;
+            for (i = 0; i < optionData.length; i++) {
+                lineItem = document.createElement('li');
+                lineItem.classList.add('screen-nav-item');
+
+                lineTitle = document.createElement('a');
+                lineTitle.classList.add('screen-nav-link');
+                lineTitle.innerHTML = optionData[i].info + ' | ';
+                lineTitle.setAttribute('href', '#');
+                lineItem.appendChild(lineTitle);
+
+                lineData = document.createElement('span');
+                lineData.classList.add('option-state');
+                if (optionData[i].data === true) {
+                    lineData.innerHTML = 'on';
+                } else {
+                    lineData.innerHTML = 'off';
+                }
+                lineTitle.appendChild(lineData);
+
+                optionList.insertBefore(lineItem, optionListFirst);
+            }
+
+            LINKS = Sizzle('#screen-intro a');
+
+            // Setup all navigation
+            this.bind();
         },
 
         update: function () {
