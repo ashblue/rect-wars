@@ -2,6 +2,8 @@
  * @todo Logo should probably be animated and an actual image sprite
  * @todo Remove sizzle, not necessary
  * @todo Prevent default up, down, left, and right
+ * @todo Scrolling logic should be a separate module that the controller can call
+ * @todo myDB needs a better method to make toggle database values easier
  */
 (function (cp) {
     /** @type {object} Reference to the screen CP entity */
@@ -85,8 +87,8 @@
          * scrolls?
          * @returns {undefined}
          */
-        setNavNumbers: function (elTarget, elSource, increment) {
-            elTarget.innerHTML = '1 - ' + increment + ' of ' + elSource.length;
+        setNavNumbers: function (elTarget, elSource, pageCount) {
+            elTarget.innerHTML = '1 of ' + Math.ceil(elSource.length / pageCount);
         }
     };
 
@@ -155,6 +157,8 @@
                 links[i].classList.remove('active');
             }
             e.target.classList.add('active');
+
+            return false;
         },
 
         stopScrolling: function (e) {
@@ -164,21 +168,51 @@
         scrollContainer: function (e) {
             e.preventDefault();
 
-            // Get the target
+            // Get the DOM elements
             var target = document.getElementById(e.target.dataset.target);
+            var navMini = document.getElementById(e.target.dataset.mininav);
+
+            // Get the navigations current count
+            var navMiniCount = parseInt(navMini.innerHTML.split()[0], 10);
 
             // Get the target's attributes we need for scrolling
             var height = parseInt(target.parentElement.style.height, 10);
             var marginTop = parseInt(target.style.marginTop, 10) || 0;
+            var direction = e.target.dataset.direction;
 
             // Depending upon the direction, scroll up or down
-            if (e.target.dataset.direction === 'down' && marginTop > -parseInt(target.parentElement.dataset.maxheight, 10) - marginTop) {
+            if (direction === 'down' && marginTop > -parseInt(target.parentElement.dataset.maxheight, 10) - marginTop) {
                 target.style.marginTop = -height + marginTop + 'px';
-            } else if (e.target.dataset.direction === 'up' && marginTop !== 0) {
+                navMiniCount += 1;
+            } else if (direction === 'up' && marginTop !== 0) {
                 target.style.marginTop = height + marginTop + 'px';
+                navMiniCount -= 1;
             }
 
-            // Update the nav counter
+            // Replace text for mini nav
+            navMini.innerHTML = navMiniCount + navMini.innerHTML.substr(1);
+        },
+
+        toggleOption: function (e) {
+            e.preventDefault();
+
+            // Get current data
+            var key = parseInt(e.target.dataset.key, 10);
+            var currentData = myDB.getTableLine('options', 'id', key);
+
+            // Set new database value
+            myDB.setTableLine('options', 'id', key, {
+                info: currentData.info,
+                data: !currentData.data,
+                id: key
+            });
+
+            // Toggle text
+            if (e.target.innerHTML.search(' on') === -1) {
+                e.target.innerHTML = e.target.innerHTML.replace('| off', '| on');
+            } else {
+                e.target.innerHTML = e.target.innerHTML.replace('| on', '| off');
+            }
         }
     };
 
@@ -268,23 +302,20 @@
                 lineTitle = document.createElement('a');
                 lineTitle.classList.add('screen-nav-link');
                 lineTitle.innerHTML = optionData[i].info + ' | ';
-                lineTitle.setAttribute('href', '#');
-                lineItem.appendChild(lineTitle);
-
-                lineData = document.createElement('span');
-                lineData.classList.add('option-state');
                 if (optionData[i].data === true) {
-                    lineData.innerHTML = 'on';
+                    lineTitle.innerHTML += 'on';
                 } else {
-                    lineData.innerHTML = 'off';
+                    lineTitle.innerHTML += 'off';
                 }
-                lineTitle.appendChild(lineData);
+                lineTitle.setAttribute('href', '#');
+                lineTitle.dataset.key = optionData[i].id;
+                lineItem.appendChild(lineTitle);
 
                 optionList.insertBefore(lineItem, optionListFirst);
             }
 
             // Declare all link items here since they've been successfully created
-            LINKS = Sizzle('#screen-intro a');
+            LINKS = Sizzle('#screen-intro .screen-nav-link');
 
             // Set height of history table and nav text
             var tableLine = Sizzle('#history-table tr');
@@ -311,20 +342,38 @@
 
         update: function () {
             if (cp.input.down('down')) {
-                // Get all links
+                // Process links
                 var links = _activeScreen.getElementsByClassName('screen-nav-link'),
                     replaceNext = null;
+
+                // Scroll if the data attribute is present
+                if (links[0].dataset.scroll) {
+                    var scroller = _activeScreen.getElementsByClassName('nav-mini-link');
+                    scroller[0].click();
+                }
+
                 for (var i = 0; i < links.length; i++) {
+                    // Find the current active item
                     if (links[i].className === 'screen-nav-link active' && i !== links.length - 1) {
                         links[i].classList.remove('active');
                         replaceNext = true;
+
+                    // If an active item was found set the next to active
                     } else if (replaceNext === true) {
                         return links[i].classList.add('active');
                     }
                 }
             } else if (cp.input.down('up')) {
+                // Process links
                 var links = _activeScreen.getElementsByClassName('screen-nav-link'),
                     replaceNext = null;
+
+                // Scroll if the data attribute is present
+                if (links[0].dataset.scroll) {
+                    var scroller = _activeScreen.getElementsByClassName('nav-mini-link');
+                    scroller[1].click();
+                }
+
                 for (var i = links.length; i--;) {
                     if (links[i].className === 'screen-nav-link active' && i !== 0) {
                         links[i].classList.remove('active');
@@ -361,9 +410,9 @@
                 if (LINKS[i].dataset.script) {
                     LINKS[i].addEventListener('click', _events.runScript);
 
-                // Add scrolling to mini navs
-                } else if (LINKS[i].dataset.direction) {
-                    LINKS[i].addEventListener('click', _events.scrollContainer);
+                // Toggle options via key
+                } else if (LINKS[i].dataset.key) {
+                    LINKS[i].addEventListener('click', _events.toggleOption);
 
                 // Set click to navigate events where necessary
                 } else {
@@ -372,6 +421,15 @@
 
                 LINKS[i].addEventListener('mouseover', _events.hover);
             }
+
+
+            // Add scrolling to mini navs
+            var miniNavs = document.getElementsByClassName('nav-mini-link');
+            for (i = miniNavs.length; i--;) {
+                miniNavs[i].addEventListener('click', _events.scrollContainer);
+            }
+                //} else if (LINKS[i].dataset.direction) {
+                //    LINKS[i].addEventListener('click', _events.scrollContainer);
 
             //window.addEventListener('keydown', _events.stopScrolling);
         },

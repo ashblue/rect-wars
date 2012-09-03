@@ -179,7 +179,8 @@ body {
 	display: block;
 }
 
-#history-table-scroll {
+#history-table-container,
+#achievements-container {
 	margin-bottom: 20px;
 }
 
