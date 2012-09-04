@@ -10,16 +10,16 @@ var cp = cp || {};
 
 cp.math = {
     // Random should only be run in the init for best practice
-    random: function(max, min) {
+    random: function (max, min) {
         if (!min) min = 1;
         return Math.floor(Math.random() * (max - min + 1) + min);
     },
-    
+
     // Returns a random positive or negative number
     randomPosNeg: function() {
         return Math.random() < 0.5 ? -1 : 1;
     },
-    
+
     // Number converter
     // val = the number you wish to convert such as 5 (5 milliseconds)
     // base = the number to divide it by 1000 (conversion to a second)
@@ -33,23 +33,23 @@ cp.math = {
         } else {
             var total = val / base;
         }
-        
+
         return Math.round(total * Math.pow(10, round)) / Math.pow(10, round);
     },
-    
+
     // Returns the angle between two points (in radians)
     angle: function(x1, y1, x2, y2) {
         var diff_x = (x1 - x2) * -1;
         var diff_y = (y1 - y2) * -1;
-        
+
         return Math.atan2(diff_y,diff_x);
     },
-    
+
     // Returns the distance between two points.
     distance: function(x1, y1, x2, y2) {
         var diff_x = (x1 - x2) * -1;
         var diff_y = (y1 - y2) * -1;
-        
+
         return Math.sqrt( (diff_x * diff_x) + (diff_y * diff_y));
     }
 };

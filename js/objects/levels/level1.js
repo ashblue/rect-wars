@@ -7,6 +7,7 @@
 
             cp.game.spawn('Background');
             cp.game.spawn('Player');
+            cp.game.spawn('Director');
         },
 
         update: function () {
