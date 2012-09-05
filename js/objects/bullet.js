@@ -6,7 +6,7 @@ cp.template.Bullet = cp.template.Entity.extend({
     x: cp.core.width / 2,
     y: cp.core.height - 50,
     active: true,
-    speed: 10,
+    speed: 6,
     angle: 1.5707963267948966, // straight south, son!
     delay: -1,
     hp: 1,
