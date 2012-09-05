@@ -3,20 +3,208 @@
 <html>
 <head>
     <title>Rectangle Wars</title>
-    <link rel="stylesheet" type="text/css" href="style/style.css" />
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="style/style.css" media="all">
 </head>
 
 <body>
-    <button class="fullscreen-button" onclick="cp.fullscreen.open();">Fullscreen</button>
+    <!-- Commented out as its break my IDE - Ash -->
+    <!--<button class="fullscreen-button" onclick="cp.fullscreen.open();">Fullscreen</button>-->
     <div id="container">
         <canvas id="canvas">
             Download Google Chrome to play this game now!
         </canvas>
+        <div id="screen-intro" class="hide">
+            <div id="screen-home" class="screen-modal">
+                <ul class="screen-nav">
+                    <li class="screen-nav-item">
+                        <a data-nav="screen-levels" class="screen-nav-link active" href="#">
+                            play game
+                        </a>
+                    </li>
+                    <li class="screen-nav-item">
+                        <a data-nav="screen-history" class="screen-nav-link" href="#">
+                            character history
+                        </a>
+                    </li>
+                    <li class="screen-nav-item">
+                        <a data-nav="screen-achievements" class="screen-nav-link" href="#">
+                            achievements
+                        </a>
+                    </li>
+                    <li class="screen-nav-item">
+                        <a data-nav="screen-credits" data-credits="start" class="screen-nav-link" href="#">
+                            credits
+                        </a>
+                    </li>
+                    <li class="screen-nav-item">
+                        <a data-nav="screen-options" class="screen-nav-link" href="#">
+                            options
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div id="screen-levels" class="screen-modal">
+                <ul class="screen-nav">
+                    <li class="screen-nav-item">
+                        <a class="screen-nav-link active" href="#" data-script="startLv1">
+                            lv1 - cyberspace
+                        </a>
+                    </li>
+                    <li class="screen-nav-item">
+                        <a class="screen-nav-link" href="#" data-script="comingSoon">
+                            lv2 - nodeville
+                        </a>
+                    </li>
+                    <li class="screen-nav-item">
+                        <a class="screen-nav-link" href="#"  data-script="comingSoon">
+                            lv3 - server grid
+                        </a>
+                    </li>
+                    <li class="screen-nav-item">
+                        <a data-nav="screen-home" class="screen-nav-link" href="#">
+                            back
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div id="screen-history" class="screen-modal">
+                <span id="history-nav" class="nav-info">1 - 5 of 13</span>
+                <div id="history-table-container" class="hide-overflow">
+                    <div id="history-table-scroll">
+                        <table id="history-table" class="history-table">
+                            <colgroup>
+                                <col class="table-title" />
+                                <col class="table-data" />
+                            </colgroup>
+                        </table>
+                    </div>
+                </div>
+
+                <span class="screen-nav-item">
+                    <a data-scroll="#" data-nav="screen-home" class="screen-nav-link active" href="#">
+                        back
+                    </a>
+                </span>
+
+                <nav class="nav-mini">
+                    <a class="nav-mini-link nav-prev" href="#" data-mininav="history-nav" data-target="history-table-scroll" data-direction="down">down</a>
+                    <a class="nav-mini-link nav-next" href="#" data-mininav="history-nav" data-target="history-table-scroll" data-direction="up">up</a>
+                </nav>
+            </div>
+
+            <div id="screen-achievements" class="screen-modal">
+                <span id="achievements-nav" class="nav-info">1 - 3 of 27</span>
+
+                <div id="achievements-container" class="hide-overflow">
+                    <div id="achievements-scroll">
+                        <ul id="achievements" class="achievement-list"></ul>
+                    </div>
+                </div>
+
+                <span class="screen-nav-item">
+                    <a data-scroll="#" data-nav="screen-home" data-scrolldown="" data-scrollup="" class="screen-nav-link active" href="#">
+                        back
+                    </a>
+                </span>
+
+                <nav class="nav-mini">
+                    <a class="nav-mini-link nav-prev" href="#" data-mininav="achievements-nav" data-target="achievements-scroll" data-direction="down">down</a>
+                    <a class="nav-mini-link nav-next" href="#" data-mininav="achievements-nav" data-target="achievements-scroll" data-direction="up">up</a>
+                </nav>
+            </div>
+
+            <div id="screen-credits" class="screen-modal">
+                <div id="credit-roll" class="credit-roll hide-overflow">
+                    <div id="credit-scroll" class="credit-scroll">
+                        <strong class="credit-title">FPO - Work in progress</strong>
+
+                        <strong class="credit-title">Original Concept By</strong>
+                        <ul class="credit-list">
+                            <li>Gary</li>
+                            <li>Bettina</li>
+                            <li>Ben</li>
+                            <li>Ash</li>
+                        </ul>
+
+                        <strong class="credit-title">Designers</strong>
+                        <ul class="credit-list">
+                            <li>Ben</li>
+                            <li>Rachel</li>
+                        </ul>
+
+                        <strong class="credit-title">Lead Designer</strong>
+                        <ul class="credit-list">
+                            <li>Ben</li>
+                        </ul>
+
+                        <strong class="credit-title">Developers</strong>
+                        <ul class="credit-list">
+                            <li>Ash</li>
+                            <li>Joe</li>
+                            <li>Bettina</li>
+                            <li>David</li>
+                        </ul>
+
+                        <strong class="credit-title">Sound Engineers</strong>
+                        <ul class="credit-list">
+                            <li>David</li>
+                            <li>Bettina</li>
+                        </ul>
+
+                        <strong class="credit-title">Developers</strong>
+                        <ul class="credit-list">
+                            <li>Joe</li>
+                            <li>Ash</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <span class="screen-nav-item">
+                    <a data-credits="stop" data-nav="screen-home" class="screen-nav-link active" href="#">
+                        back
+                    </a>
+                </span>
+            </div>
+
+            <div id="screen-options" class="screen-modal">
+                <ul class="screen-nav">
+                    <!--<li class="screen-nav-item">
+                        <a class="screen-nav-link active" href="#">
+                            particle generation | <span class="option-state">on</span>
+                        </a>
+                    </li>
+                    <li class="screen-nav-item">
+                        <a class="screen-nav-link" href="#">
+                            skip cutscenes | <span class="option-state">off</span>
+                        </a>
+                    </li>
+                    <li class="screen-nav-item">
+                        <a class="screen-nav-link" href="#">
+                            automatic fullscreen | <span class="option-state">off</span>
+                        </a>
+                    </li>
+                    <li class="screen-nav-item">
+                        <a class="screen-nav-link" href="#">
+                            show hitboxes | <span class="option-state">off</span>
+                        </a>
+                    </li>-->
+                    <li class="screen-nav-item">
+                        <a data-nav="screen-home" class="screen-nav-link" href="#">
+                            back
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
 
     <!-- Load dependencies -->
     <script type="text/javascript" src="js/depen/animation.js"></script>
     <script type="text/javascript" src="js/depen/class_init.js"></script>
+    <script type="text/javascript" src="js/lib/sizzle.js"></script>
 
     <!-- Load all files in development -->
     <script type="text/javascript" src="js/engine/all.js"></script>
@@ -26,5 +214,3 @@
 </body>
 
 </html>
-
-

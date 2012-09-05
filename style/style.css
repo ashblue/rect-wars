@@ -64,6 +64,10 @@ body {
     padding: 0;
 }
 
+.hide {
+	display: none;
+}
+
 #container {
     text-align: center;
 }
@@ -80,7 +84,218 @@ body {
     z-index: 1;
 }
 
-/* Debug - Nav */
+/**
+ * Web fonts
+ * @link http://www.tenbytwenty.com/munro.php
+ */
+@font-face {
+    font-family: 'munroregular';
+    src: url('fonts/munro-webfont.eot');
+    src: url('fonts/munro-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/munro-webfont.woff') format('woff'),
+         url('fonts/munro-webfont.ttf') format('truetype'),
+         url('fonts/munro-webfont.svg#munroregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'munro_narrowregular';
+    src: url('fonts/munro_narrow-webfont.eot');
+    src: url('fonts/munro_narrow-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/munro_narrow-webfont.woff') format('woff'),
+         url('fonts/munro_narrow-webfont.ttf') format('truetype'),
+         url('fonts/munro_narrow-webfont.svg#munro_narrowregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'munro_smallregular';
+    src: url('fonts/munro_small-webfont.eot');
+    src: url('fonts/munro_small-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/munro_small-webfont.woff') format('woff'),
+         url('fonts/munro_small-webfont.ttf') format('truetype'),
+         url('fonts/munro_small-webfont.svg#munro_smallregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/**
+ * Intro screen logic
+ */
+#screen-intro {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: auto;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+    width: 700px;
+    height: 440px;
+    padding-top: 260px;
+	font-family: 'munroregular';
+	color: #d4d4d4;
+	font-size: 48px;
+}
+
+.screen-modal {
+	position: absolute;
+	top: 45%;
+	text-align: center;
+	width: 700px;
+}
+
+.screen-modal#screen-levels {
+	top: 50%;
+}
+
+.screen-nav-item {
+	padding-bottom: 12px;
+}
+
+.screen-nav-link {
+	color: #535353;
+	text-decoration: none;
+	letter-spacing: 3px;
+}
+
+.screen-nav-link.active {
+	color: #d4d4d4;
+	padding-left: 32px;
+	margin-left: -32px;
+	background: url('images/cursor.png') no-repeat 0 50%;
+}
+
+#screen-history {
+	top: 38%;
+}
+
+.nav-info {
+	font-size: 18px;
+	text-align: left;
+	margin: 0 0 10px 30px;
+	display: block;
+}
+
+#history-table-container,
+#achievements-container {
+	margin-bottom: 20px;
+}
+
+.history-table {
+	font-size: 40px;
+	margin: 0 30px 0 30px;
+	width: 640px;
+}
+
+.history-table td {
+	padding: 8px 15px;
+	text-align: left;
+}
+
+.history-table td + td {
+	text-align: right;
+}
+
+.history-table tr:nth-child(odd) {
+	background: rgba(255, 255, 255, .08);
+}
+
+#screen-achievements {
+	top: 42%;
+}
+
+.achievement-list {
+	margin: 0 30px 0 30px;
+	text-align: left;
+	letter-spacing: 1px;
+}
+
+.achievement-item {
+	margin-bottom: 20px;
+	padding: 10px 15px;
+	background: url('images/checkbox.png') no-repeat 584px 50% rgba(255, 255, 255, .08);
+}
+
+.achievement-item.active {
+	background-image: url('images/checkbox-active.png');
+}
+
+.achievement-title {
+	display: block;
+	font-size: 24px;
+	margin-bottom: 5px;
+}
+
+.achievement-desc {
+	display: block;
+	font-size: 18px;
+}
+
+#screen-credits {
+	top: 38%;
+}
+
+.credit-roll {
+	height: 340px;
+}
+
+.hide-overflow {
+	overflow: hidden;
+}
+
+.credit-title {
+	font-size: 34px;
+	letter-spacing: 1px;
+	margin-bottom: 10px;
+	display: block;
+}
+
+.credit-title:first-child {
+	margin-top: 300px;
+}
+
+.credit-list {
+	font-size: 25px;
+	letter-spacing: 1px;
+	margin-bottom: 30px;
+}
+
+.credit-list li {
+	margin-bottom: 10px;
+}
+
+.nav-mini {
+	position: absolute;
+	bottom: 0;
+	right: 30px;
+}
+
+.nav-mini-link {
+	width: 50px;
+	height: 50px;
+	display: block;
+	text-indent: -9999px;
+	display: inline-block;
+}
+
+.nav-prev {
+	background: url('images/nav-prev.png') no-repeat;
+}
+
+.nav-next {
+	background: url('images/nav-next.png') no-repeat;
+}
+
+.disabled {
+	opacity: 0.4;
+}
+
+/**
+ * Debug Navigation
+ */
 #debug-nav:after {
     visibility: hidden;
     display: block;
@@ -143,7 +358,7 @@ body {
     width: 23px;
     height: 23px;
     cursor: help;
-    background: url('info.png') no-repeat;
+    /*background: url('info.png') no-repeat;*/
 }
 
 .info:hover .info-text {

@@ -2,7 +2,6 @@
 Running The Game
 -----------*/
 console.log(cp);
-console.log('test');
 
 // Enable debug mode
 cp.debug.active = true;
@@ -10,19 +9,47 @@ cp.debug.active = true;
 cp.debug.showCollisions = true;
 
 // List of scripts to load from js/objects
-cp.load.objects = ['background', 'player', 'hazard', 'director', 'bullet', 'drone', 'drone-slowbot', 'drone-zagger', 'drone-carrier', 'drone-mini'];
+cp.load.objects = [
+    'database/mydb',
+    'database/structure',
+    'screens/controller',
+    'background',
+    'levels/level1',
+    'player',
+    'hazard',
+    'director',
+    'bullet',
+    'drone',
+    'drone-slowbot',
+    'drone-zagger',
+    'drone-dyo',
+    'drone-carrier',
+    'drone-mini'
+];
 
 // init(width, height, run onLoad function)
-cp.core.init(700, 700, function() {
-    // Keyboard key configuration
-    cp.input.bind('arrowUp', 'up');
-    cp.input.bind('arrowDown', 'down');
-    cp.input.bind('arrowLeft', 'left');
-    cp.input.bind('arrowRight', 'right');
-    cp.input.bind('x', 'shoot');
+cp.core.init(700, 700, function () {
+    var onSuccess = function () {
+        // Keyboard key configuration
+        cp.input.bind('arrowUp', 'up');
+        cp.input.bind('arrowDown', 'down');
+        cp.input.bind('arrowLeft', 'left');
+        cp.input.bind('arrowRight', 'right');
+        cp.input.bind('space', 'space');
+        cp.input.bind('enter', 'submit');
+        //cp.input.bind('x', 'shoot');
 
-    // Spawn objects
-    cp.game.spawn('Background');
-    cp.game.spawn('Player');
-    cp.game.spawn('Director');
+        // Spawn objects
+        cp.game.spawn('Screens');
+
+        // Spawn level
+        //cp.game.spawn('Background');
+        //cp.game.spawn('Player');
+        //cp.game.spawn('Director');
+    };
+
+    myDB.setSuccess = onSuccess;
+
+    // Setup the database
+    myDB.setDB('testDB1', 1, dbStructure);
 });
