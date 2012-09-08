@@ -45,12 +45,11 @@ cp.core.init(700, 700, function () {
         //cp.input.bind('x', 'shoot');
 
         // Spawn objects
+        // start with menu screen or...
         cp.game.spawn('Screens');
-
-        // Spawn level
-        //cp.game.spawn('Background');
-        //cp.game.spawn('Player');
-        //cp.game.spawn('Director');
+        
+        // ...start with level 1
+        //cp.game.spawn('Level1');
     };
 
     myDB.setSuccess = onSuccess;
