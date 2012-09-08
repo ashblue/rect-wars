@@ -59,6 +59,7 @@
             cp.input.bind('arrowLeft', 'left');
             cp.input.bind('arrowRight', 'right');
             cp.input.bind('x', 'shoot');
+            cp.input.bind('c', 'special');
         }
     });
 }(cp));

@@ -1,3 +1,6 @@
+/**
+ * @requires 'bomb.js'
+ */
 (function(cp) {
     /** @type {number} Cached reference of game's play area */
     var _gameWidth = null;
@@ -152,6 +155,9 @@
             // Shoot
             if (cp.input.press('shoot') && this.delay.expire()) {
                 cp.game.spawn('Laser', this.x + this.xMiddle, this.y);
+                this.delay.reset();
+            } else if (cp.input.press('special') && this.delay.expire()) {
+                cp.game.spawn('Bomb', this.x, this.y);
                 this.delay.reset();
             }
         },
