@@ -1,6 +1,7 @@
 /**
  * @fileoverview The object that will house all stats functionality.
  * @author gkoehl@nerdery.com (Gary Koehl)
+ * @requires myDB
  */
 
 (function(cp) {
@@ -59,6 +60,7 @@
 
         /**
          * Unlock achievements based on the current state of the database.
+         * ENHANCEMENT: Add in event triggers
          */
         unlockAchievements: function() {
             var statsTable = myDB.getTable(STATS_TABLE_NAME);
@@ -120,6 +122,7 @@
             else {
                 ++this._data[id].data;
             }
+            this.saveData();
         },
 
         /**
