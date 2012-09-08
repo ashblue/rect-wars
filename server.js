@@ -16,18 +16,19 @@ app.get('/', function(req, res){
 });
 
 /* combine all engine files into one (/js/engine/all.js) */
-var engine_all_js = "";
-var engine_js_files = fs.readdirSync('js/engine');
-for(var i in engine_js_files) {
-  var engine_js_file = 'js/engine/' + engine_js_files[i];
-  if(/.js$/.test(engine_js_file)) {
-    engine_all_js += fs.readFileSync(engine_js_file);
-  }
-}
 
 //server all engine js files
 app.get('/js/engine/all.js', function(req, res){
-  res.send(engine_all_js, {'Content-Type': 'application/javascript'});
+    var engine_all_js = "";
+    var engine_js_files = fs.readdirSync('js/engine');
+    for(var i in engine_js_files) {
+        var engine_js_file = 'js/engine/' + engine_js_files[i];
+        if(/.js$/.test(engine_js_file)) {
+            engine_all_js += fs.readFileSync(engine_js_file);
+        }
+    }
+
+    res.send(engine_all_js, {'Content-Type': 'application/javascript'});
 });
 
 

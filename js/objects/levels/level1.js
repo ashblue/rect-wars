@@ -3,6 +3,9 @@
         name: 'level1',
 
         init: function () {
+            // Used to determine the width of the game's play area
+            cp.core.gameWidth = 800;
+
             this.bind();
 
             cp.game.spawn('Background');

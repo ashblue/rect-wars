@@ -3,24 +3,24 @@ cp.template.Director = cp.template.Entity.extend({
     delay: 2,
     delayInit: 5,
     delayEnd: 5,
-    
+
     wavesCount: 0,
-    
+
     wavesSpawn: true,
-    
+
     init: function() {
       this.waves = [];
       var i = 3;
       for(; i<=100;i++) {
         this.waves.push({entity: 'HazardWave'});
-        var dronewave = {entity: 'DroneZaggerWave', options: {drone_count: i}};
-        if(i%2 == 0 || i > 8) {
-          dronewave.options.swarm = true;
-        }
-        this.waves.push(dronewave);
+        //var dronewave = {entity: 'DroneZaggerWave', options: {drone_count: i}};
+        //if(i%2 == 0 || i > 8) {
+        //  dronewave.options.swarm = true;
+        //}
+        //this.waves.push(dronewave);
       }
     },
-    
+
     update: function() {
         // Check if a wave is active and there is still a player
         if (this.wavesSpawn && this.waves.length && cp.game.entityGetVal('player', true)) {
@@ -29,10 +29,10 @@ cp.template.Director = cp.template.Entity.extend({
             this.wavesSpawn = false;
         }
     },
-    
+
     kill: function() {
         this._super();
-        
+
         // Grab all existing elements and run kill on them
     }
 });

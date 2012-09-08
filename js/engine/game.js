@@ -32,12 +32,12 @@ cp.game = {
     // if it matches.
     entityGetVal: function(name, val) {
         // Setup stack for storage
-        var stack = new Array;
+        var stack = [];
 
         // Loop through objects and get matched value
-        if (typeof val != 'undefined') { // Incase no val was passed
-            for (var j in cp.core.storage) {
-                if (cp.core.storage[j][(name)] == val) stack.push(cp.core.storage[j]);
+        if (val !== undefined) { // Incase no val was passed
+            for (var j = cp.core.storage.length; j--;) {
+                if (cp.core.storage[j][name] === val) stack.push(cp.core.storage[j]);
             }
         } else {
             for (var j in cp.core.storage) {

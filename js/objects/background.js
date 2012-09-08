@@ -27,19 +27,19 @@ cp.template.Background = cp.template.Entity.extend({
 
     draw: function() {
         cp.ctx.fillStyle = this.color;
-        cp.ctx.fillRect(this.x, this.y, cp.core.width, cp.core.height);
-        
+        cp.ctx.fillRect(cp.camera.x, cp.camera.y, cp.core.gameWidth, cp.core.height);
+
         // For each star
         for (var i = this.stars.length; i--;) {
             // Run draw
             this.stars[i].draw();
-            
+
             this.stars[i].y += this.stars[i].speed;
-            
+
             if (this.stars[i].y > cp.core.height)
-                this.stars.splice(i, 1); 
+                this.stars.splice(i, 1);
         }
-        
+
         // Reset global alpha to prevent screwing up other images
         cp.ctx.globalAlpha = 1;
     }
@@ -51,7 +51,7 @@ cp.template.Star = cp.template.Entity.extend({
     init: function() {
         this.width = cp.math.random(2, 1);
         this.height = cp.math.random(2, 1);
-        this.x = cp.math.random(cp.core.width);
+        this.x = cp.math.random(cp.core.gameWidth);
         this.alpha = cp.math.random(8, 3) * 0.1;
         this.speed = cp.math.random(6, 4) * 0.1;
     },
