@@ -7,28 +7,25 @@ Handled html5 fullscreen implementation.
 var cp = cp || {};
 
 (function(cp, window) {
-    cp.fullscreen = {
-        _fullscreenButton: null,
+    var WINDOW = Sizzle('window');
 
+    cp.fullscreen = {
         init: function() {
             document.fullScreen = document.fullScreen || document.mozFullScreen || document.webkitIsFullScreen;
 
             window.addEventListener("fullscreenchange", this.monitor, false);
             window.addEventListener("mozfullscreenchange", this.monitor, false);
             window.addEventListener("webkitfullscreenchange", this.monitor, false);
-
-            this._fullscreenButton = document.getElementById('fullscreen-button');
-            this._fullscreenButton.addEventListener('click', this.open, false);
         },
 
         monitor: function(e) {
             // if(document.fullscreen) {
-            //     cp.core.canvas.width = 500;
-            //     cp.core.canvas.height = 400;
+            //     cp.core.canvas.style.width = '80%';
+            //     cp.core.canvas.style.height = '80%';
             // }
             // else {
-            //     cp.core.canvas.width = 500;
-            //     cp.core.canvas.height = 400;
+            //     cp.core.canvas.style.width = '80%';
+            //     cp.core.canvas.style.height = '80%';
             // }
         },
 
