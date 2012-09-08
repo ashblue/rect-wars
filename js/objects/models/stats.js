@@ -25,6 +25,11 @@
         _items: null,
 
         /**
+         * @type {number} Holds the score.
+         */
+        _score: null,
+
+        /**
          * The stats object
          */
         init: function() {
@@ -37,6 +42,7 @@
         resetData: function() {
             var statsTable = myDB.getTable(STATS_TABLE_NAME);
             this._items = statsTable;
+            this._score = 0;
         },
 
         /**
@@ -109,6 +115,28 @@
         setData: function(id, value) {
             this._items[id].data = value;
             this.saveData();
+        },
+
+        /**
+         * Get the score.
+         */
+        getScore: function() {
+            return this._score;
+        },
+
+        /**
+         * Sets the score given a value.
+         *
+         * @param {number} value The value to add or overwrite.
+         * @param {bool} overwrite If set the value overwrites the score.
+         */
+        setScore: function(value, overwrite) {
+            if (overwrite != null && overwrite) {
+                this._score = value;
+            }
+            else {
+                this._score += value;
+            }
         },
 
         /**
