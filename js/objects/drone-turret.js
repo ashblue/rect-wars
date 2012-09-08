@@ -1,5 +1,5 @@
 (function() {
-    cp.template.DroneDyo = cp.template.Drone.extend({
+    cp.template.DroneTurret = cp.template.Drone.extend({
         next_stop_y: 100,
         fire_delay: 20,
         fire_delay_count: 30,

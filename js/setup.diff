@@ -13,6 +13,7 @@ cp.load.objects = [
     'database/mydb',
     'database/structure',
     'screens/controller',
+    'models/leveldata',
     'background',
     'levels/level1',
     'player',
@@ -22,7 +23,7 @@ cp.load.objects = [
     'drone',
     'drone-slowbot',
     'drone-zagger',
-    'drone-dyo',
+    'drone-turret',
     'drone-carrier',
     'drone-mini'
 ];
