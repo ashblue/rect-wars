@@ -19,14 +19,14 @@ var cp = cp || {};
         },
 
         monitor: function(e) {
-            // if(document.fullscreen) {
-            //     cp.core.canvas.style.width = '80%';
-            //     cp.core.canvas.style.height = '80%';
-            // }
-            // else {
-            //     cp.core.canvas.style.width = '80%';
-            //     cp.core.canvas.style.height = '80%';
-            // }
+            if(document.fullscreen) {
+                cp.core.canvas.style.width = '80%';
+                cp.core.canvas.style.height = '80%';
+            }
+            else {
+                cp.core.canvas.style.width = '80%';
+                cp.core.canvas.style.height = '80%';
+            }
         },
 
         close: function(e) {
