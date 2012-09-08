@@ -528,6 +528,21 @@ var myDB = myDB || {};
     };
 
     /**
+     * Gets and returns a the data of a specific line of a table
+     * via a key with a value from the cache.
+     * @param {string} table Name of the table such as 'player'
+     * @param {string} key Main key for the table, such as 'id'
+     * @param {mixed} value Value you are looking for in a specific key,
+     * for example you might look for a key of 'id' and value of 5
+     * @returns {mixed} Returns the data property of the table line
+     * @example myDB.getTableData('achievements', 'id', 5);
+     */
+    myDB.getTableData = function (table, key, value) {
+        var tableLine = this.getTableLine(table, key, value);
+        return tableLine.data;
+    };
+
+    /**
      * Modify an existing line of data in a table and update the cache to reflect it.
      * @param {string} table Name of the table such as 'achievements'
      * @param {object} data Object to write such as 'id', for the cache
