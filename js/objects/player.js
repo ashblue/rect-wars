@@ -1,5 +1,6 @@
 /**
  * @requires 'bomb.js'
+ * @requires 'models/stats.js'
  */
 (function(cp) {
     /** @type {number} Cached reference of game's play area */
@@ -168,6 +169,9 @@
         },
 
         kill: function () {
+            // Increment deaths stat, id - 6
+            cp.stats.incrementData(6);
+
             cp.game.spawn('Continue', this);
             this._super();
         }
@@ -252,6 +256,9 @@
         init: function(x, y) {
             this.x = x;
             this.y = y;
+
+            // Increment bullets fired stat, id - 3
+            cp.stats.incrementData(3);
         },
 
         update: function() {
