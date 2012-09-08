@@ -11,21 +11,20 @@ var cp = cp || {};
 
     cp.fullscreen = {
         init: function() {
-            document.fullScreen = document.fullScreen || document.mozFullScreen || document.webkitIsFullScreen;
-
             window.addEventListener("fullscreenchange", this.monitor, false);
             window.addEventListener("mozfullscreenchange", this.monitor, false);
             window.addEventListener("webkitfullscreenchange", this.monitor, false);
         },
 
         monitor: function(e) {
-            if(document.fullscreen) {
+            document.isFullscreen = document.fullScreen || document.mozFullScreen || document.webkitIsFullScreen;
+            if(document.isFullscreen) {
                 cp.core.canvas.style.width = '80%';
                 cp.core.canvas.style.height = '80%';
             }
             else {
-                cp.core.canvas.style.width = '80%';
-                cp.core.canvas.style.height = '80%';
+                cp.core.canvas.style.width = 'auto';
+                cp.core.canvas.style.height = 'auto';
             }
         },
 

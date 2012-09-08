@@ -30,6 +30,7 @@
         player: true, // Do not remove, used for search functionality elsewhere
         bulletSpeed: 0.3, // Time in seconds between bullets fired
         hp: 1,
+        deathCount: 0,
 
         offset: {
             x: -25,
@@ -166,6 +167,7 @@
         collide: function () {
             this.hit = true;
             this.kill();
+            ++this.deathCount;
         },
 
         kill: function () {
