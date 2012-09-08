@@ -22,7 +22,7 @@
         /**
          * @type {array} Holds a copy of the database table rows.
          */
-        _data: null,
+        _items: null,
 
         /**
          * The stats object
@@ -32,25 +32,25 @@
         },
 
         /**
-         * Resets the _data property the current state of the database.
+         * Resets the _items property the current state of the database.
          */
         resetData: function() {
             var statsTable = myDB.getTable(STATS_TABLE_NAME);
-            this._data = statsTable;
+            this._items = statsTable;
         },
 
         /**
-         * Updates the database with the current _data property.
+         * Updates the database with the current _items property.
          */
         saveData: function() {
             var index = 0;
-            var dataLength = this._data.length;
+            var dataLength = this._items.length;
             for (; index < dataLength; index++) {
                 myDB.quickReplace(
                     STATS_TABLE_NAME,
                     index,
                     'data',
-                    this._data[index].data
+                    this._items[index].data
                 );
             }
 
@@ -97,7 +97,7 @@
          * @param {number} id The id of the row to get.
          */
         getData: function(id) {
-            return this._data[id].data;
+            return this._items[id].data;
         },
 
         /**
@@ -107,7 +107,8 @@
          * @param {mixed} value The value to update data to.
          */
         setData: function(id, value) {
-            this._data[id].data = value;
+            this._items[id].data = value;
+            this.saveData();
         },
 
         /**
@@ -116,11 +117,11 @@
          * @param {number} id The id of the row update.
          */
         incrementData: function(id) {
-            if (this._data[id].data == null) {
-                this._data[id].data = 0;
+            if (this._items[id].data == null) {
+                this._items[id].data = 0;
             }
             else {
-                ++this._data[id].data;
+                ++this._items[id].data;
             }
             this.saveData();
         },
@@ -131,12 +132,13 @@
          * @param {number} id The id of the row update.
          */
         decrementData: function(id) {
-            if (this._data[id].data == null) {
-                this._data[id].data = 0;
+            if (this._items[id].data == null) {
+                this._items[id].data = 0;
             }
             else {
-                --this._data[id].data;
+                --this._items[id].data;
             }
+            this.saveData();
         }
     };
 }(cp));
