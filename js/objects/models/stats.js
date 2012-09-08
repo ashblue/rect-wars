@@ -4,15 +4,22 @@
  */
 
 (function(cp) {
-    /** @type {string} Holds the table name */
-    var TABLE_NAME = 'stats';
+    /**
+     * @type {string} Holds the stats table name.
+     */
+    var STATS_TABLE_NAME = 'stats';
 
     /**
-     * The stats object
+     * @type {string} Holds the achievements table name.
+     */
+    var ACHIEVEMENTS_TABLE_NAME = 'achievements';
+
+    /**
+     * The stats object.
      */
     cp.stats = {
         /**
-         *    @type {array} Holds a copy of the database table rows
+         * @type {array} Holds a copy of the database table rows.
          */
         _data: null,
 
@@ -24,52 +31,87 @@
         },
 
         /**
-         * Resets the _data property the current state of the database
+         * Resets the _data property the current state of the database.
          */
         resetData: function() {
-            statsTable = myDB.getTable(TABLE_NAME);
+            var statsTable = myDB.getTable(STATS_TABLE_NAME);
             this._data = statsTable;
         },
 
         /**
-         * Updates the database with the current _data property
+         * Updates the database with the current _data property.
          */
         saveData: function() {
             var index = 0;
             var dataLength = this._data.length;
             for (; index < dataLength; index++) {
                 myDB.quickReplace(
-                    TABLE_NAME,
+                    STATS_TABLE_NAME,
                     index,
                     'data',
                     this._data[index].data
                 );
             }
+
+            // Unlock any achievements
+            this.unlockAchievements();
         },
 
         /**
-         * Gets the data at the index given
+         * Unlock achievements based on the current state of the database.
+         */
+        unlockAchievements: function() {
+            var statsTable = myDB.getTable(STATS_TABLE_NAME);
+            var achievementsTable = myDB.getTable(ACHIEVEMENTS_TABLE_NAME);
+
+            // Check for button masher achievement, id - 0
+            // Checks bullets fired stat, id - 3
+            if (!achievementsTable[0].unlocked &&
+                statsTable[3].data >= 1000) {
+                myDB.quickReplace(
+                    ACHIEVEMENTS_TABLE_NAME,
+                    0,
+                    'unlocked',
+                    true
+                );
+            }
+
+            // Check for cyberspace surfer achievement, id - 1
+            // Checks levels completed stat, id - 5
+            if (!achievementsTable[1].unlocked &&
+                statsTable[5].data >= 1) {
+                myDB.quickReplace(
+                    ACHIEVEMENTS_TABLE_NAME,
+                    1,
+                    'unlocked',
+                    true
+                );
+            }
+        },
+
+        /**
+         * Gets the data at the index given.
          *
-         * @param {number} id The id of the row to get
+         * @param {number} id The id of the row to get.
          */
         getData: function(id) {
             return this._data[id].data;
         },
 
         /**
-         * Probably not going to be used but just in case, added a setter
+         * Probably not going to be used but just in case, added a setter.
          *
-         * @param {number} id The id of the row update
-         * @param {mixed} value The value to update data to
+         * @param {number} id The id of the row update.
+         * @param {mixed} value The value to update data to.
          */
         setData: function(id, value) {
             this._data[id].data = value;
         },
 
         /**
-         * Increments the data property at the index given
+         * Increments the data property at the index given.
          *
-         * @param {number} id The id of the row update
+         * @param {number} id The id of the row update.
          */
         incrementData: function(id) {
             if (this._data[id].data == null) {
@@ -81,9 +123,9 @@
         },
 
         /**
-         * Decrements the data property at the index given
+         * Decrements the data property at the index given.
          *
-         * @param {number} id The id of the row update
+         * @param {number} id The id of the row update.
          */
         decrementData: function(id) {
             if (this._data[id].data == null) {
