@@ -15,7 +15,16 @@ cp.load.objects = [
     'screens/controller',
     'background',
     'levels/level1',
-    'player'
+    'player',
+    'hazard',
+    'director',
+    'bullet',
+    'drone',
+    'drone-slowbot',
+    'drone-zagger',
+    'drone-dyo',
+    'drone-carrier',
+    'drone-mini'
 ];
 
 // init(width, height, run onLoad function)
@@ -32,6 +41,11 @@ cp.core.init(700, 700, function () {
 
         // Spawn objects
         cp.game.spawn('Screens');
+
+        // Spawn level
+        //cp.game.spawn('Background');
+        //cp.game.spawn('Player');
+        //cp.game.spawn('Director');
     };
 
     myDB.setSuccess = onSuccess;

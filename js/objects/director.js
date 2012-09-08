@@ -9,19 +9,16 @@ cp.template.Director = cp.template.Entity.extend({
     wavesSpawn: true,
     
     init: function() {
-        // Setup your array for how many waves you want
-        this.waves = [
-            {entity: 'HazardWave'},
-            {entity: 'ZigZagDroneWave', options: {drone_count: 2}},
-            {entity: 'HazardWave'},
-            {entity: 'ZigZagDroneWave', options: {drone_count: 3}},
-            {entity: 'HazardWave'},
-            {entity: 'ZigZagDroneWave', options: {drone_count: 4}},
-            {entity: 'HazardWave'},
-            {entity: 'ZigZagDroneWave', options: {drone_count: 5}},
-            {entity: 'HazardWave'},
-            {entity: 'ZigZagDroneWave', options: {drone_count: 5, swarm: true}}
-        ];
+      this.waves = [];
+      var i = 3;
+      for(; i<=100;i++) {
+        this.waves.push({entity: 'HazardWave'});
+        var dronewave = {entity: 'DroneZaggerWave', options: {drone_count: i}};
+        if(i%2 == 0 || i > 8) {
+          dronewave.options.swarm = true;
+        }
+        this.waves.push(dronewave);
+      }
     },
     
     update: function() {
