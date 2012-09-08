@@ -65,8 +65,11 @@ var myDB = myDB || {};
     /** @type {object} Reference to master object */
     var SELF = null;
 
-    /** @type {object} Holds a cache of the database. */
+    /** @type {object} Holds a cache of the database */
     var _data = null;
+
+    /** @type {object} Stores key path declarations */
+    var _dataKeyPath = {};
 
     /** @type {function} Storage location for timer */
     var _updateCheck = null;
@@ -89,6 +92,7 @@ var myDB = myDB || {};
             var writeTotal = 0, writeCount = 1;
             for (var i = writeData.length; i--;) {
                 var table = writeData[i].table;
+                _dataKeyPath[table] = writeData[i].keyPath;
                 _data[table] = [];
                 writeTotal += 1;
 
@@ -132,6 +136,10 @@ var myDB = myDB || {};
 
         getCache: function () {
             return _data;
+        },
+
+        getKey: function (table) {
+            return _dataKeyPath[table];
         }
     };
 
@@ -416,6 +424,15 @@ var myDB = myDB || {};
             myDB.cache.setCacheLine(table, key, keyName, writeData);
 
             return this;
+        },
+
+        setTableLine: function (table, writeData) {
+            // Update the database
+            var dbTransaction = _db.transaction([table], 'readwrite');
+            var oStore = dbTransaction.objectStore(table);
+            oStore.put(writeData);
+
+            return this;
         }
     };
 }(myDB));
@@ -455,24 +472,14 @@ var myDB = myDB || {};
     };
 
     /**
-     * Set and get the database, should only be called once per page load.
-     * @param {string} dbName Name of the database you want to retrieve
-     * @param {number} ver Version of the database you want, newer versions trigger
+     * Set the database, should only be called once per page load.
+     * @param {string} dbName Name of the database you want to retrieve or create
+     * @param {number} ver Version of the database you want, new version triggers
      * an upgrade
      * @param {object} data Data you want to use to create or upgrade
-     * your database, see example for more info
-     * var dbData = {
-     *     table: 'player',
-     *     keyPath: 'name',
-     *     data: [
-     *         {
-     *              name: null,
-     *              fullscreen: false,
-     *              particles: true
-     *         }
-     *     ]
-     * };
+     * your database
      * @returns {self}
+     * @example myDB.setDB('myCustomDBName', 1, testDB);
      */
     myDB.setDB = function (dbName, ver, data) {
         myDB.getDB.request(dbName, ver, data);
@@ -481,7 +488,14 @@ var myDB = myDB || {};
     };
 
     /**
-     * Overwrite the callback that fires if indexedDB fails to load
+     * Overwrite the callback that fires if indexedDB fails to load. By default
+     * it fires an alert
+     * @param {function} callback Function to fire on failure
+     * @returns {self}
+     * @example
+     * myDB.setNoDBCallback(function() {
+     *   console.error('get a real browser');
+     * });
      */
     myDB.setNoDBCallback = function (callback) {
         _private.loadFailure = callback;
@@ -490,8 +504,10 @@ var myDB = myDB || {};
     };
 
     /**
-     * Retrive a specific table
+     * Retrive a specific table from the cache
      * @param {string} table Name of the table you want to get
+     * @returns {array} Returns an array with all the table's objects
+     * @example myDB.getTable('levels');
      */
     myDB.getTable = function (table) {
         return myDB.getDB.getDataTable(table);
@@ -501,33 +517,70 @@ var myDB = myDB || {};
      * Gets and returns a specific line of a table via a key with a value from
      * the cache.
      * @param {string} table Name of the table such as 'player'
-     * @param {string} key Main key for the table, such as 'name'
+     * @param {string} key Main key for the table, such as 'id'
      * @param {mixed} value Value you are looking for in a specific key,
-     * for example you might look for a key of 'name' and value of 'Joe'
+     * for example you might look for a key of 'id' and value of 5
      * @returns {object} Only returns one line or an empty object
+     * @example myDB.getTableLine('achievements', 'id', 5);
      */
     myDB.getTableLine = function (table, key, value) {
         return myDB.getDB.getDataTableKey(table, key, value);
     };
 
     /**
-     * Modify an existing line of data in a table.
-     * @param {string} table Name of the table such as 'player'
-     * @param {object} data Object to write, if you wanted to set a
-     * 'name' key it might look like {name: 'joe'}
+     * Modify an existing line of data in a table and update the cache to reflect it.
+     * @param {string} table Name of the table such as 'achievements'
+     * @param {object} data Object to write such as 'id', for the cache
+     * @param {mixed} keyValue Literal value of the key you want to set, for updating the cache
+     * @param {object} value The object to replace the existing data such as { level: 2, unlocked: true }
+     * in the database
+     * @returns {self}
+     * @example myDB.setTableLine('achievements', 'id', 5, { level: 2, unlocked: true });
+     * @todo Really doesn't work that well, should probably be re-worked
+     * @deprecated Replace with quickReplace
+     */
+    myDB.setTableLine = function (table, key, keyValue, value) {
+        myDB.getDB.setData(table, key, keyValue, value);
+        return this;
+    };
+
+    /**
+     * Optimized data replacement for the cache and IndexedDB at the same time. Replaces
+     * a specific line in a table with the provided values after finding a match.
+     * @param {string} table Name of the table such as 'achievements'
+     * @param {mixed} keyValue Searches main key for a table and looks for that specific value.
+     * If the key is 'info', you might searched for a value of 'name'
+     * @param {string} replaceName Parameter that should be replaced on the matched line
+     * @param {mixed} replaceNameValue Replace the previous value with the given data
      * @returns {self}
      */
-    myDB.setTableLine = function (table, key, keyName, value) {
-        myDB.getDB.setData(table, key, keyName, value);
+    myDB.quickReplace = function (table, keyValue, replaceName, replaceNameValue) {
+        // Get necessary data
+        var tableLines = myDB.getDB.getDataTable(table);
+        var key = myDB.cache.getKey(table);
+
+        // Loop through values of the cached object checking for the replaceName
+        for (var i = tableLines.length; i--;) {
+            // Replace the value of the discoverd replaceName with replaceNameValue
+            if (tableLines[i][key] !== keyValue) {
+                continue;
+            }
+
+            // Send the current object off to the database for replacement
+            tableLines[i][replaceName] = replaceNameValue;
+            myDB.getDB.setTableLine(table, tableLines[i]);
+
+            // Exit early
+            return this;
+        }
+
         return this;
     };
 
     /**
      * On successful database retrieval callback
      */
-    myDB.setSuccess = function() {
-
-    };
+    myDB.setSuccess = function() {};
 
     myDB.init();
 
