@@ -9,6 +9,11 @@
             // Used to determine the width of the game's play area
             this.bind();
 
+            // Toggle hitbox display from the options table.
+            var hitboxOptionSetting =
+                myDB.getTableData('options', 'info', 'show hitboxes');
+            cp.debug.showCollisions = hitboxOptionSetting;
+
             cp.game.spawn('Background');
             cp.game.spawn('Player');
             cp.game.spawn('Director');

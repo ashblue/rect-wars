@@ -103,6 +103,9 @@
             BACKGROUND.kill();
             BACKGROUND = null;
 
+            // Open fullscreen mode
+            cp.fullscreen.openIfOptionSet();
+
             // Run the actual level
             cp.game.spawn('Level1');
         },
