@@ -27,8 +27,9 @@ cp.load.objects = [
     'drones/drone-carrier',
     'drones/drone-mini',
     'waves/wave',
-    'waves/drone-zagger-wave',
     'waves/empty-wave',
+    'waves/drone-zagger-wave',
+    'waves/drone-turret-wave',
 ];
 
 // init(width, height, run onLoad function)

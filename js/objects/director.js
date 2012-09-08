@@ -8,17 +8,8 @@ cp.template.Director = cp.template.Entity.extend({
 
     wavesSpawn: true,
 
-    init: function() {
-      this.waves = [];
-      var i = 3;
-      for(; i<=100;i++) {
-        this.waves.push({entity: 'HazardWave'});
-        //var dronewave = {entity: 'DroneZaggerWave', options: {drone_count: i}};
-        //if(i%2 == 0 || i > 8) {
-        //  dronewave.options.swarm = true;
-        //}
-        //this.waves.push(dronewave);
-      }
+    init: function(waves) {
+      this.waves = waves;
     },
 
     update: function() {
