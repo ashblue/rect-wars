@@ -357,7 +357,9 @@
 
                 for (var i = 0; i < links.length; i++) {
                     // Find the current active item
-                    if (links[i].className === 'screen-nav-link active' && i !== links.length - 1) {
+                    if ((links[i].className === 'screen-nav-link active' ||
+                        links[i].className === 'screen-nav-link disabled active') &&
+                        i !== links.length - 1) {
                         links[i].classList.remove('active');
                         replaceNext = true;
 
@@ -378,7 +380,9 @@
                 }
 
                 for (var i = links.length; i--;) {
-                    if (links[i].className === 'screen-nav-link active' && i !== 0) {
+                    if ((links[i].className === 'screen-nav-link active' ||
+                        links[i].className === 'screen-nav-link disabled active') &&
+                        i !== 0) {
                         links[i].classList.remove('active');
                         replaceNext = true;
                     } else if (replaceNext === true) {

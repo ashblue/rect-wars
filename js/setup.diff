@@ -35,6 +35,11 @@ cp.load.objects = [
 
 // init(width, height, run onLoad function)
 cp.core.init(700, 700, function () {
+    var isChrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
+    if (!isChrome) {
+        alert('This is built for Google Chrome, all other browsers not supported at the moment.');
+    }
+
     var onSuccess = function () {
         // Keyboard key configuration
         cp.input.bind('arrowUp', 'up');

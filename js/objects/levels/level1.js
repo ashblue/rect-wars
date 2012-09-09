@@ -40,8 +40,12 @@
                 myDB.getTableData('options', 'info', 'show hitboxes');
             cp.debug.showCollisions = hitboxOptionSetting;
 
+            // Initialize the stats object
+            cp.stats.init();
+
             cp.game.spawn('Background');
             cp.game.spawn('Player');
+            cp.game.spawn('SpecialUI');
             cp.game.spawn('Director', this.waves);
         },
 
