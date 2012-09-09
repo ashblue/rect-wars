@@ -89,6 +89,7 @@ cp.template.Asteroid = cp.template.Entity.extend({
     },
 
     draw: function() {
+        this._super();
         //first attempt
         //this.drawRandomPolygon4();
 
