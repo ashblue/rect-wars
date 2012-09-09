@@ -13,13 +13,16 @@ cp.load.objects = [
     'database/mydb',
     'database/structure',
     'screens/controller',
+    'engine/fullscreen',
     'models/leveldata',
+    'models/stats',
     'background',
     'levels/level1',
+    'bullet',
+    'bomb',
     'player',
     'hazard',
     'director',
-    'bullet',
     'drones/drone',
     'drones/drone-slowbot',
     'drones/drone-zagger',
@@ -30,7 +33,7 @@ cp.load.objects = [
     'waves/empty-wave',
     'waves/asteroid-wave',
     'waves/drone-zagger-wave',
-    'waves/drone-turret-wave',
+    'waves/drone-turret-wave'
 ];
 
 // init(width, height, run onLoad function)
