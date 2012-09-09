@@ -28,6 +28,7 @@ cp.load.objects = [
     'drones/drone-mini',
     'waves/wave',
     'waves/empty-wave',
+    'waves/asteroid-wave',
     'waves/drone-zagger-wave',
     'waves/drone-turret-wave',
 ];

@@ -12,10 +12,10 @@
             {entity: 'DroneZaggerWave', options: {swarm: true}}, //Introduce zaggers that fly everywhere without a format
             {entity: 'EmptyWave'},
             {entity: 'DroneTurretWave'}, //Introduce turrets with light asteroids
-            //{entity: 'EmptyWave'},
+            {entity: 'EmptyWave'},
             //{entity: 'DroneTurretWave'}, //Zaggers and turrets formatted like Space Invaders that slowly go down the screen
             //{entity: 'EmptyWave'},
-            //{entity: 'DroneTurretWave'}, //Heavy asteroids that require dodging instead of shooting
+            {entity: 'AsteroidWave'}, //Heavy asteroids that require dodging instead of shooting
             //{entity: 'EmptyWave'},
             //{entity: 'DroneTurretWave'}, //Introduce 3 carriers with a few zaggers
             //{entity: 'EmptyWave'},
