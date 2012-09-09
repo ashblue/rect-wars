@@ -316,6 +316,10 @@
             cp.ctx.fillRect(this.padding + cp.camera.x, this.padding + cp.camera.y, this.width, this.height);
             cp.ctx.strokeRect(this.padding + cp.camera.x, this.padding + cp.camera.y, this.width, this.height);
 
+            if (_specialCount === 0) {
+                return;
+            }
+
             // Create fill size
             var widthFill = this.width * (_specialCount / _specialMax);
 
@@ -335,7 +339,7 @@
             }
 
             // Output fill
-            cp.ctx.fillRect(this.padding + cp.camera.x, this.padding + cp.camera.y, widthFill, this.height);
+            cp.ctx.fillRect(this.padding + cp.camera.x + 3, this.padding + cp.camera.y + 3, widthFill - 6 , this.height - 6);
         }
     });
 }(cp));

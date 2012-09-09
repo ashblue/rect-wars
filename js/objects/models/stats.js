@@ -2,6 +2,11 @@
  * @fileoverview The object that will house all stats functionality.
  * @author gkoehl@nerdery.com (Gary Koehl)
  * @requires myDB
+ * @todo Create the score counter with the following
+ * - Create score DOM element html
+ * - Create CSS for score
+ * - Cache value of score dom elements in models/stats.js
+ * - Update with death of enemies
  */
 
 (function(cp) {
