@@ -1,6 +1,5 @@
 /**
- * @requires 'bomb.js'
- * @requires 'models/stats.js'
+ * @requires 'models/.js'
  */
 (function(cp) {
     /** @type {number} Cached reference of game's play area */
@@ -8,6 +7,13 @@
 
     /** @type {number} Amount of padding to give the camera while scrolling */
     var _cameraPanPadding = 70;
+
+    /** @type {number} Amount of shots required to fill the special bar */
+    var _specialMax = 10;
+
+    /** @type {number} Current number of shots for the special bar */
+    //var _specialCount = 0;
+    var _specialCount = 0;
 
     var _private = {
         generateParticle: function (Player, Continue, color) {
@@ -158,9 +164,10 @@
             if (cp.input.press('shoot') && this.delay.expire()) {
                 cp.game.spawn('Laser', this.x + this.xMiddle, this.y);
                 this.delay.reset();
-            } else if (cp.input.down('special') && this.delay.expire()) {
+            } else if (cp.input.down('special') && this.delay.expire() && _specialCount >= _specialMax) {
                 cp.game.spawn('Bomb', this.x, this.y);
                 this.delay.reset();
+                _specialCount = 0;
             }
         },
 
@@ -279,7 +286,56 @@
 
         collide: function(object) {
             object.hp -= 1;
+            _specialCount += 1;
             this.kill();
+        }
+    });
+
+    cp.template.SpecialUI = cp.template.Entity.extend({
+        padding: 15,
+        height: 13,
+        colorBorder: '#d1d1d1',
+        colorBackground: '#323232',
+        colorFill: '#1d8ad1',
+        colorReady: '#48b7ff',
+        delayColorToggle: 0.5,
+
+        init: function () {
+            this.width = cp.core.width - (this.padding * 2);
+            this.timerColorToggle = new cp.timer(this.delayColorToggle);
+        },
+
+        update: function() {
+
+        },
+
+        draw: function() {
+            // Draw background
+            cp.ctx.fillStyle = this.colorBackground;
+            cp.ctx.strokeStyle = this.colorBorder;
+            cp.ctx.fillRect(this.padding + cp.camera.x, this.padding + cp.camera.y, this.width, this.height);
+            cp.ctx.strokeRect(this.padding + cp.camera.x, this.padding + cp.camera.y, this.width, this.height);
+
+            // Create fill size
+            var widthFill = this.width * (_specialCount / _specialMax);
+
+            // Flash fill when ready
+            if (widthFill >= this.width) {
+                widthFill = this.width;
+                if (this.timerColorToggle.expire()) {
+                    this.colorReady = (this.colorReady === this.colorFill ? '#48b7ff' : this.colorFill);
+                    this.timerColorToggle.reset();
+                }
+
+                cp.ctx.fillStyle = this.colorReady;
+
+            // Draw fill noramlly
+            } else {
+                cp.ctx.fillStyle = this.colorFill;
+            }
+
+            // Output fill
+            cp.ctx.fillRect(this.padding + cp.camera.x, this.padding + cp.camera.y, widthFill, this.height);
         }
     });
 }(cp));
