@@ -15,6 +15,9 @@
     //var _specialCount = 0;
     var _specialCount = 0;
 
+    /** @type {number} Offset to make bullets shoot from the tip of the ship */
+    var _yBulletOffset = 20;
+
     var _private = {
         generateParticle: function (Player, Continue, color) {
             return {
@@ -162,7 +165,7 @@
 
             // Shoot
             if (cp.input.press('shoot') && this.delay.expire()) {
-                cp.game.spawn('Laser', this.x + this.xMiddle, this.y);
+                cp.game.spawn('Laser', this.x + this.xMiddle, this.y - _yBulletOffset);
                 this.delay.reset();
             } else if (cp.input.down('special') && this.delay.expire() && _specialCount >= _specialMax) {
                 cp.game.spawn('Bomb', this.x, this.y);
@@ -257,20 +260,27 @@
 
     cp.template.Laser = cp.template.Entity.extend({
         type: 'a',
-        width: 2,
-        height: 14,
+        width: 7,
+        height: 7,
         speed: 5,
         color: '#aaa',
 
         init: function(x, y) {
-            this.x = x;
+            this.x = x - (this.width / 2);
             this.y = y;
+
+            this.animSheet = new cp.animate.sheet('bullet.png', 11, 11);
+            this.animBullet = new cp.animate.cycle(this.animSheet, 0.05, [0]);
+            this.animSet = this.animBullet;
+            this.offset.x = -2;
 
             // Increment bullets fired stat, id - 3
             cp.stats.incrementData(3);
         },
 
         update: function() {
+            this._super();
+
             this.y -= this.speed;
 
             // Kill bullet if it goes outside the boundaries
@@ -278,11 +288,13 @@
                 this.kill();
         },
 
-        draw: function() {
-            // Placeholder image
-            cp.ctx.fillStyle = this.color;
-            cp.ctx.fillRect(this.x, this.y - this.height, this.width, this.height);
-        },
+        //draw: function() {
+        //    this._super();
+
+        //    // Placeholder image
+        //    cp.ctx.fillStyle = this.color;
+        //    cp.ctx.fillRect(this.x, this.y - this.height, this.width, this.height);
+        //},
 
         collide: function(object) {
             object.hp -= 1;
